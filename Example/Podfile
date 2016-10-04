@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'SJRefresh_Example' do
+  pod 'SJRefresh', :path => '../'
+
+  target 'SJRefresh_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

@@ -181,7 +181,9 @@ open class RefreshView: UIView {
 
 	// MARK: KVO
 
-	open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+	open override func observeValue(forKeyPath keyPath: String?, of object: Any?,
+	                                change: [NSKeyValueChangeKey : Any]?,
+	                                context: UnsafeMutableRawPointer?) {
 		guard let scrollView = object as? UIScrollView else {
 			return
 		}
@@ -275,7 +277,7 @@ open class RefreshView: UIView {
 			insets.bottom += self.frame.size.height
 		}
 		scrollView.bounces = false
-		UIView.animate(withDuration: 2.0,
+		UIView.animate(withDuration: RefreshConst.animationDuration,
 		               delay: 0,
 		               options:[],
 		               animations: {

@@ -19,6 +19,7 @@ class ViewController: UIViewController {
 		tableView.addRefreshView([UIImage(named: "pulltorefresharrow.png")!,
 		                          UIImage(named: "pulltorefresharrowUp.png")!]) { _ in
 
+									sleep(2)
 			self.tableView.stopPullRefreshEver()
 		}
     }

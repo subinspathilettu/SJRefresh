@@ -22,15 +22,12 @@ TODO: Add long description of the pod here.
                        DESC
 
   s.homepage         = 'https://code.qburst.com/subinsjose/SJRefreshControl'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Subins Jose' => 'subinsjose@qburst.com' }
   s.source           = { :git => 'https://code.qburst.com/subinsjose/SJRefreshControl.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-
+  s.social_media_url = 'https://twitter.com/subinsjose'
   s.ios.deployment_target = '9.0'
-
-  s.source_files = 'SJRefresh/Classes/**/*'
+  s.source_files     = 'SJRefresh/Classes/**/*'
   
   # s.resource_bundles = {
   #   'SJRefresh' => ['SJRefresh/Assets/*.png']

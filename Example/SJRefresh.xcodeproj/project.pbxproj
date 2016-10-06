@@ -13,7 +13,7 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		641AAEC31DA51FA3002D106B /* pulltorefresharrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 641AAEC11DA51FA3002D106B /* pulltorefresharrow.png */; };
-		641AAEC41DA51FA3002D106B /* pulltorefresharrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 641AAEC21DA51FA3002D106B /* pulltorefresharrowUp.png */; };
+		64C8FB801DA66DFF00C9CDAF /* Loader.gif in Resources */ = {isa = PBXBuildFile; fileRef = 64C8FB7F1DA66DFF00C9CDAF /* Loader.gif */; };
 		69C6965322AF5D376A8D3B96 /* Pods_SJRefresh_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D44F6BA9F0DEDDCC4610CBC /* Pods_SJRefresh_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,7 +31,7 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		60AF37EB87CACFC77FAB3E1A /* SJRefresh.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SJRefresh.podspec; path = ../SJRefresh.podspec; sourceTree = "<group>"; };
 		641AAEC11DA51FA3002D106B /* pulltorefresharrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pulltorefresharrow.png; sourceTree = "<group>"; };
-		641AAEC21DA51FA3002D106B /* pulltorefresharrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pulltorefresharrowUp.png; sourceTree = "<group>"; };
+		64C8FB7F1DA66DFF00C9CDAF /* Loader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Loader.gif; sourceTree = "<group>"; };
 		69B8424B40AAD6FDC73FB541 /* Pods-SJRefresh_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SJRefresh_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SJRefresh_Example/Pods-SJRefresh_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		9F10C25372A49F4433C86BCD /* Pods-SJRefresh_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SJRefresh_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-SJRefresh_Example/Pods-SJRefresh_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C07167EE090E15A15A19970B /* Pods-SJRefresh_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SJRefresh_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SJRefresh_Tests/Pods-SJRefresh_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -75,7 +75,7 @@
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				641AAEC11DA51FA3002D106B /* pulltorefresharrow.png */,
-				641AAEC21DA51FA3002D106B /* pulltorefresharrowUp.png */,
+				64C8FB7F1DA66DFF00C9CDAF /* Loader.gif */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -158,6 +158,7 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 5DYFD9UMYF;
 						LastSwiftMigration = 0800;
 					};
 				};
@@ -186,10 +187,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
-				641AAEC41DA51FA3002D106B /* pulltorefresharrowUp.png in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 				641AAEC31DA51FA3002D106B /* pulltorefresharrow.png in Resources */,
+				64C8FB801DA66DFF00C9CDAF /* Loader.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,7 +369,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5DYFD9UMYF;
 				INFOPLIST_FILE = SJRefresh/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -383,7 +386,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5DYFD9UMYF;
 				INFOPLIST_FILE = SJRefresh/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";

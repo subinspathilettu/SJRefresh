@@ -13,16 +13,15 @@ class ViewController: UIViewController {
 
 	@IBOutlet weak var tableView: UITableView!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	override func viewDidLoad() {
+		super.viewDidLoad()
 
-		tableView.addRefreshView([UIImage(named: "pulltorefresharrow.png")!,
-		                          UIImage(named: "pulltorefresharrowUp.png")!]) { _ in
-
-									sleep(2)
+		tableView.addRefreshView(pullImage: "pulltorefresharrow.png",
+		                         animationGIF: "Loader") { (_) in
+			sleep(2)
 			self.tableView.stopPullRefreshEver()
 		}
-    }
+	}
 }
 
 extension ViewController: UITableViewDataSource {

@@ -84,6 +84,7 @@ open class RefreshView: UIView {
 	public override convenience init(frame: CGRect) {
 
 		self.init(options: RefreshOption(),
+		           pullImage: UIImage(),
 		          animationImages: [UIImage](),
 		          frame:frame,
 		          refreshCompletion:nil)
@@ -94,6 +95,7 @@ open class RefreshView: UIView {
 	}
 
 	public init(options: RefreshOption,
+	            pullImage: UIImage,
 	            animationImages: [UIImage],
 	            frame: CGRect,
 	            refreshCompletion :((Void) -> Void)?, down:Bool=true) {
@@ -107,9 +109,7 @@ open class RefreshView: UIView {
 
 		arrow = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
 		arrow.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-
-		arrow.image = UIImage(named: RefreshConst.imageName, in: Bundle(for: type(of: self)), compatibleWith: nil)
-
+		arrow.image = pullImage
 
 		if animationImages.isEmpty {
 
@@ -122,7 +122,8 @@ open class RefreshView: UIView {
 		} else {
 
 			var animationframe = CGRect.zero
-			animationframe.size = animationImages[0].size
+			animationframe.size.width = animationImages[0].size.width
+			animationframe.size.height = animationImages[0].size.height
 
 			animationView = UIImageView(frame: animationframe)
 			animationView?.animationImages = animationImages

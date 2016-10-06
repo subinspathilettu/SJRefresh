@@ -16,21 +16,41 @@ public extension UIScrollView {
 		return pullToRefreshView as? RefreshView
 	}
 
-	open func addRefreshView(_ animationImages: [UIImage],
+	open func addRefreshView(pullImage: String,
+	                         animationGIF: String,
 	                         refreshCompletion :((Void) -> Void)?) {
 
-		addPullRefresh(animationImages,
+		guard let animationImages = try? UIImage.imagesFromGif(name: animationGIF) else {
+			print("UIScrollView+Extension: Could not load images from gif.")
+			refreshCompletion?()
+		}
+
+		let image = UIImage(named: pullImage)
+		addPullRefresh(pullImage: image!,
+		               animationImages: animationImages!,
 		               refreshCompletion: refreshCompletion)
 	}
 
-	public func addPullRefresh(_ animationImages: [UIImage],
+	open func addRefreshView(pullImage: UIImage,
+	                         animationImages: [UIImage],
+	                         refreshCompletion :((Void) -> Void)?) {
+
+		addPullRefresh(pullImage: pullImage,
+		               animationImages: animationImages,
+		               refreshCompletion: refreshCompletion)
+	}
+
+	public func addPullRefresh(pullImage: UIImage,
+	                           animationImages: [UIImage],
 	                           refreshCompletion :(((Void) -> Void)?),
 	                           options: RefreshOption = RefreshOption()) {
+
 		let refreshViewFrame = CGRect(x: 0,
 		                              y: -RefreshConst.height,
 		                              width: self.frame.size.width,
 		                              height: RefreshConst.height)
 		let refreshView = RefreshView(options: options,
+		                              pullImage: pullImage,
 		                              animationImages: animationImages,
 		                              frame: refreshViewFrame,
 		                              refreshCompletion: refreshCompletion)

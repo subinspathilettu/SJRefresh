@@ -16,8 +16,11 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		tableView.addRefreshView(pullImage: "pulltorefresharrow.png",
-		                         animationGIF: "Loader") { (_) in
+		let options = RefreshViewOptions()
+		options.pullImage = "pulltorefresharrow"
+		options.gifImage = "Loader"
+
+		tableView.addRefreshView(options: options) { _ in
 			sleep(2)
 			self.tableView.stopPullRefreshEver()
 		}

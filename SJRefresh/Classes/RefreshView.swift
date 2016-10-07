@@ -30,7 +30,7 @@ open class RefreshView: UIView {
 	var kvoContext = "PullToRefreshKVOContext"
 	private var type = RefreshType.Default
 
-	public var options: RefreshOption
+	public var options: RefreshViewOptions
 	public var backgroundView: UIView
 	public var arrow: UIImageView
 	public var indicator: UIActivityIndicatorView?
@@ -83,7 +83,7 @@ open class RefreshView: UIView {
 	// MARK: UIView
 	public override convenience init(frame: CGRect) {
 
-		self.init(options: RefreshOption(),
+		self.init(options: RefreshViewOptions(),
 		           pullImage: UIImage(),
 		          animationImages: [UIImage](),
 		          frame:frame,
@@ -94,7 +94,7 @@ open class RefreshView: UIView {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	public init(options: RefreshOption,
+	public init(options: RefreshViewOptions,
 	            pullImage: UIImage,
 	            animationImages: [UIImage],
 	            frame: CGRect,
@@ -285,12 +285,7 @@ open class RefreshView: UIView {
 						scrollView.contentInset = insets
 			},
 		               completion: { _ in
-						if self.options.autoStopTime != 0 {
-							let time = DispatchTime.now() + Double(Int64(self.options.autoStopTime * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-							DispatchQueue.main.asyncAfter(deadline: time) {
-								self.state = .stop
-							}
-						}
+
 						self.refreshCompletion?()
 		})
 	}

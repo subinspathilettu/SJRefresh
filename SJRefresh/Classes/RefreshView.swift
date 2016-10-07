@@ -2,9 +2,23 @@
 //  RefreshView.swift
 //  Pods
 //
-//  Created by Subins on 04/10/16.
+//  Created by Subins Jose on 05/10/16.
+//  Copyright © 2016 Subins Jose. All rights reserved.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+//    associated documentation files (the "Software"), to deal in the Software without restriction,
+//    including without limitation the rights to use, copy, modify, merge, publish, distribute,
+//    sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+//    furnished to do so, subject to the following conditions:
 //
+//  The above copyright notice and this permission notice shall be included in all copies or
+//    substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+//  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+//  AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+//  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import UIKit
 
@@ -60,7 +74,7 @@ open class RefreshView: UIView {
 			case .stop:
 				stopAnimating()
 			case .finish:
-				var duration = RefreshConst.animationDuration
+				var duration = options.animationDuration
 				var time = DispatchTime.now() + Double(Int64(duration * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
 				DispatchQueue.main.asyncAfter(deadline: time) {
 					self.stopAnimating()
@@ -214,7 +228,7 @@ open class RefreshView: UIView {
 		let offsetY = scrollView.contentOffset.y
 
 		// Alpha set
-		if RefreshConst.alpha {
+		if options.alpha {
 			var alpha = fabs(offsetY) / (self.frame.size.height + 40)
 			if alpha > 0.8 {
 				alpha = 0.8
@@ -290,7 +304,7 @@ open class RefreshView: UIView {
 			insets.bottom += self.frame.size.height
 		}
 		scrollView.bounces = false
-		UIView.animate(withDuration: RefreshConst.animationDuration,
+		UIView.animate(withDuration: options.animationDuration,
 		               delay: 0,
 		               options:[],
 		               animations: {
@@ -319,7 +333,7 @@ open class RefreshView: UIView {
 			return
 		}
 		scrollView.bounces = self.scrollViewBounces
-		let duration = RefreshConst.animationDuration
+		let duration = options.animationDuration
 		UIView.animate(withDuration: duration,
 		               animations: {
 						scrollView.contentInset = self.scrollViewInsets

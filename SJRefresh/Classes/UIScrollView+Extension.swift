@@ -14,40 +14,19 @@ public extension UIScrollView {
 	open func addRefreshView( options: RefreshViewOptions,
 	                          refreshCompletion :((Void) -> Void)?) {
 
-		guard let animationImages = try? UIImage.imagesFromGif(name: options.gifImage!) else {
-			print("UIScrollView+Extension: Could not load images from gif.")
-			refreshCompletion?()
-		}
-
-		let image = UIImage(named: options.pullImage!)
-		addPullRefresh(pullImage: image!,
-		               animationImages: animationImages!,
-		               refreshCompletion: refreshCompletion)
-
-	}
-
-	open func addRefreshView(pullImage: UIImage,
-	                         animationImages: [UIImage],
-	                         refreshCompletion :((Void) -> Void)?) {
-
-		addPullRefresh(pullImage: pullImage,
-		               animationImages: animationImages,
+		addPullRefresh(pullImage: options.pullImage!,
+		               animationImages: getAnimationImages(options)!,
 		               refreshCompletion: refreshCompletion)
 	}
 
-	public func addPullRefresh(pullImage: UIImage,
+	public func addPullRefresh(pullImage: String?,
 	                           animationImages: [UIImage],
 	                           refreshCompletion :(((Void) -> Void)?),
 	                           options: RefreshViewOptions = RefreshViewOptions()) {
 
-		let refreshViewFrame = CGRect(x: 0,
-		                              y: -RefreshConst.height,
-		                              width: self.frame.size.width,
-		                              height: RefreshConst.height)
 		let refreshView = RefreshView(options: options,
 		                              pullImage: pullImage,
 		                              animationImages: animationImages,
-		                              frame: refreshViewFrame,
 		                              refreshCompletion: refreshCompletion)
 		refreshView.tag = RefreshConst.pullTag
 		addSubview(refreshView)
@@ -106,6 +85,17 @@ public extension UIScrollView {
 			frame.origin.y = -RefreshConst.height
 			pullToRefreshView!.frame = frame
 		}
+	}
+
+	fileprivate func getAnimationImages(_ options: RefreshViewOptions) -> [UIImage]? {
+
+		var animationImages = options.animationImages
+		if let gifImage = options.gifImage  {
+
+			animationImages = UIImage.imagesFromGif(name: gifImage)
+		}
+
+		return animationImages
 	}
 
 	fileprivate func refreshViewWithTag(_ tag:Int) -> RefreshView? {

@@ -32,7 +32,7 @@ open class RefreshView: UIView {
 
 	public var options: RefreshViewOptions
 	public var backgroundView: UIView
-	public var arrow: UIImageView
+	public var arrow: UIImageView?
 	public var indicator: UIActivityIndicatorView?
 	public var animationView: UIImageView?
 	public var scrollViewBounces: Bool = false
@@ -84,10 +84,9 @@ open class RefreshView: UIView {
 	public override convenience init(frame: CGRect) {
 
 		self.init(options: RefreshViewOptions(),
-		           pullImage: UIImage(),
+		           pullImage: nil,
 		          animationImages: [UIImage](),
-		          frame:frame,
-		          refreshCompletion:nil)
+			refreshCompletion:nil)
 	}
 
 	public required init?(coder aDecoder: NSCoder) {
@@ -95,27 +94,35 @@ open class RefreshView: UIView {
 	}
 
 	public init(options: RefreshViewOptions,
-	            pullImage: UIImage,
+	            pullImage: String?,
 	            animationImages: [UIImage],
-	            frame: CGRect,
 	            refreshCompletion :((Void) -> Void)?, down:Bool=true) {
+
+		let refreshViewFrame = CGRect(x: 0,
+		                              y: -options.viewHeight,
+		                              width: UIScreen.main.bounds.width,
+		                              height: options.viewHeight)
 
 		self.options = options
 		self.refreshCompletion = refreshCompletion
 
-		backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
+		backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width,
+		                                      height: options.viewHeight))
 		backgroundView.backgroundColor = self.options.backgroundColor
 		backgroundView.autoresizingMask = UIViewAutoresizing.flexibleWidth
 
-		arrow = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-		arrow.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-		arrow.image = pullImage
+		if pullImage != nil {
+
+			arrow = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+			arrow?.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+			arrow?.image = UIImage(named: pullImage!)
+		}
 
 		if animationImages.isEmpty {
 
 			indicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-			indicator?.bounds = self.arrow.bounds
-			indicator?.autoresizingMask = self.arrow.autoresizingMask
+			indicator?.bounds = (arrow?.bounds)!
+			indicator?.autoresizingMask = (arrow?.autoresizingMask)!
 			indicator?.hidesWhenStopped = true
 			indicator?.color = options.indicatorColor
 			type = .Default
@@ -136,22 +143,27 @@ open class RefreshView: UIView {
 		pull = down
 
 
-		super.init(frame: frame)
+		super.init(frame: refreshViewFrame)
+
+		self.frame = refreshViewFrame
 
 		type == .Default ? addSubview(indicator!) : addSubview(animationView!)
 
 		addSubview(backgroundView)
-		addSubview(arrow)
+		if arrow != nil {
+			addSubview(arrow!)
+		}
 		autoresizingMask = .flexibleWidth
 	}
 
 	open override func layoutSubviews() {
 		super.layoutSubviews()
-		self.arrow.center = CGPoint(x: UIScreen.main.bounds.size.width / 2, y: self.frame.size.height / 2)
-		self.arrow.frame = arrow.frame.offsetBy(dx: 0, dy: 0)
+		let center = CGPoint(x: UIScreen.main.bounds.size.width / 2, y: self.frame.size.height / 2)
+		self.arrow?.center = center
+		self.arrow?.frame = (arrow?.frame.offsetBy(dx: 0, dy: 0))!
 
-		self.indicator?.center = self.arrow.center
-		animationView?.center = arrow.center
+		self.indicator?.center = center
+		animationView?.center = center
 	}
 
 	open override func willMove(toSuperview superView: UIView!) {
@@ -207,7 +219,7 @@ open class RefreshView: UIView {
 			if alpha > 0.8 {
 				alpha = 0.8
 			}
-			self.arrow.alpha = alpha
+			self.arrow?.alpha = alpha
 		}
 
 		if offsetY <= 0 {
@@ -264,7 +276,7 @@ open class RefreshView: UIView {
 			animationView?.startAnimating()
 		}
 
-		self.arrow.isHidden = true
+		self.arrow?.isHidden = true
 		guard let scrollView = superview as? UIScrollView else {
 			return
 		}
@@ -302,7 +314,7 @@ open class RefreshView: UIView {
 			animationView?.stopAnimating()
 		}
 
-		self.arrow.isHidden = false
+		self.arrow?.isHidden = false
 		guard let scrollView = superview as? UIScrollView else {
 			return
 		}
@@ -311,7 +323,7 @@ open class RefreshView: UIView {
 		UIView.animate(withDuration: duration,
 		               animations: {
 						scrollView.contentInset = self.scrollViewInsets
-						self.arrow.transform = CGAffineTransform.identity
+						self.arrow?.transform = CGAffineTransform.identity
 			}, completion: { _ in
 				self.state = .pulling
 			}
@@ -321,13 +333,13 @@ open class RefreshView: UIView {
 	public func arrowRotation() {
 		UIView.animate(withDuration: 0.2, delay: 0, options:[], animations: {
 			// -0.0000001 for the rotation direction control
-			self.arrow.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI-0.0000001))
+			self.arrow?.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI-0.0000001))
 			}, completion:nil)
 	}
 
 	public func arrowRotationBack() {
 		UIView.animate(withDuration: 0.2, animations: {
-			self.arrow.transform = CGAffineTransform.identity
+			self.arrow?.transform = CGAffineTransform.identity
 		})
 	}
 }

@@ -26,4 +26,5 @@ open class RefreshViewOptions: NSObject {
 	open var animationImages: [UIImage]?
 	open var backgroundColor = UIColor.clear
 	open var indicatorColor = UIColor.gray
+	open var viewHeight: CGFloat = 80.0
 }

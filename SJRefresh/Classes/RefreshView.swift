@@ -98,9 +98,9 @@ open class RefreshView: UIView {
 	public override convenience init(frame: CGRect) {
 
 		self.init(options: RefreshViewOptions(),
-		           pullImage: nil,
+		          pullImage: nil,
 		          animationImages: [UIImage](),
-			refreshCompletion:nil)
+		          refreshCompletion:nil)
 	}
 
 	public required init?(coder aDecoder: NSCoder) {
@@ -125,10 +125,12 @@ open class RefreshView: UIView {
 		backgroundView.backgroundColor = self.options.backgroundColor
 		backgroundView.autoresizingMask = UIViewAutoresizing.flexibleWidth
 
-		if pullImage != nil {
 
-			arrow = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-			arrow?.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+
+		arrow = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+		arrow?.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+
+		if pullImage != nil {
 			arrow?.image = UIImage(named: pullImage!)
 		}
 

@@ -68,7 +68,7 @@ public extension UIScrollView {
 			animationImages = UIImage.imagesFromGif(name: gifImage)
 		}
 
-		return animationImages
+		return animationImages == nil ? [UIImage]() : animationImages
 	}
 
 	private func refreshViewWithTag(_ tag:Int) -> RefreshView? {

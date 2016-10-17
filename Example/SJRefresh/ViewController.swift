@@ -17,13 +17,17 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 
 		let options = RefreshViewOptions()
-//		options.pullImage = "pulltorefresharrow"
-//		options.gifImage = "Loader"
+		options.pullImage = "pulltorefresharrow"
+		options.gifImage = "Loader"
 
 		tableView.addRefreshView(options: options) { _ in
-			sleep(2)
+			sleep(3)
 			self.tableView.stopPullRefreshEver()
 		}
+	}
+
+	func stopRefresh() {
+		tableView.stopPullRefreshEver()
 	}
 }
 
@@ -44,3 +48,11 @@ extension ViewController: UITableViewDataSource {
 	}
 }
 
+extension ViewController: UITableViewDelegate {
+
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+		tableView.startPullRefresh()
+		perform(#selector(stopRefresh), with: nil, afterDelay: 2.0)
+	}
+}

@@ -22,14 +22,38 @@
 
 import UIKit
 
+/**
+*  Open class for customizing and setting refresh view.
+*/
 open class RefreshViewOptions: NSObject {
 
+	/**
+	* Image to show when user pull to refresh.
+	*/
 	open var pullImage: String?
+
+	/**
+	* Gif Image for animation.
+	*/
 	open var gifImage: String?
+
+	/**
+	* Images for animation.
+	*/
 	open var animationImages: [UIImage]?
-	open var backgroundColor = UIColor.clear
+
+	/**
+	* Set color for animation indicator. Default grey.
+	*/
 	open var indicatorColor = UIColor.gray
+
+	/**
+	* Set height for refresh view. Default height is 80.
+	*/
 	open var viewHeight: CGFloat = 80.0
-	open var animationDuration: Double = 0.5
-	open var alpha = true
+
+	/**
+	* Set animatoin type. Default false.
+	*/
+	open var definite = false
 }

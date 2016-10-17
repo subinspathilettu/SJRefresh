@@ -28,25 +28,37 @@ struct RefreshConst {
 	static let pullTag = 810
 }
 
+/**
+*  Open UIScrollView extension for add/remove/start/stop refresh view.
+*/
 public extension UIScrollView {
 
+	/**
+	* Method for add refreshview to scrollview.
+	*/
 	open func addRefreshView( options: RefreshViewOptions,
 	                          refreshCompletion :((Void) -> Void)?) {
 
 		let refreshView = RefreshView(options: options,
-		                              pullImage: options.pullImage,
-		                              animationImages: getAnimationImages(options)!,
 		                              refreshCompletion: refreshCompletion)
 		refreshView.tag = RefreshConst.pullTag
 		addSubview(refreshView)
 	}
 
+	/**
+	* Method for start refreshview animations.
+	*/
 	public func startPullRefresh() {
+
 		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
 		refreshView?.state = .refreshing
 	}
 
+	/**
+	* Method for stop refreshview animations.
+	*/
 	public func stopPullRefreshEver(_ ever:Bool = false) {
+
 		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
 		if ever {
 			refreshView?.state = .finish
@@ -55,20 +67,13 @@ public extension UIScrollView {
 		}
 	}
 
+	/**
+	* Method for removing refresh view from scrollview.
+	*/
 	public func removePullRefresh() {
+
 		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
 		refreshView?.removeFromSuperview()
-	}
-
-	private func getAnimationImages(_ options: RefreshViewOptions) -> [UIImage]? {
-
-		var animationImages = options.animationImages
-		if let gifImage = options.gifImage  {
-
-			animationImages = UIImage.imagesFromGif(name: gifImage)
-		}
-
-		return animationImages == nil ? [UIImage]() : animationImages
 	}
 
 	private func refreshViewWithTag(_ tag:Int) -> RefreshView? {

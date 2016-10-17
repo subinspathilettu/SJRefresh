@@ -23,9 +23,9 @@
 import UIKit
 import ImageIO
 
-public extension UIImage {
+extension UIImage {
 
-	public class func imagesFromGif(name: String) -> [UIImage]? {
+	class func imagesFromGif(name: String) -> [UIImage]? {
 
 		// Check for existance of gif
 		guard let bundleURL = Bundle.main

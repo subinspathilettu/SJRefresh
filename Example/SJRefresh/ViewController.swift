@@ -19,10 +19,19 @@ class ViewController: UIViewController {
 		let options = RefreshViewOptions()
 		options.pullImage = "pulltorefresharrow"
 		options.gifImage = "Loader"
+		options.definite = true
 
 		tableView.addRefreshView(options: options) { _ in
-			sleep(3)
-			self.tableView.stopPullRefreshEver()
+
+			self.tableView.setRefreshPrecentage(20, completion: { (status) in
+				sleep(1)
+				self.tableView.setRefreshPrecentage(50, completion: { (status) in
+					sleep(1)
+					self.tableView.setRefreshPrecentage(100, completion: { (status) in
+						self.tableView.stopPullRefreshEver()
+					})
+				})
+			})
 		}
 	}
 
@@ -45,14 +54,5 @@ extension ViewController: UITableViewDataSource {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier")
 		cell?.textLabel?.text = String(indexPath.row)
 		return cell!
-	}
-}
-
-extension ViewController: UITableViewDelegate {
-
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-		tableView.startPullRefresh()
-		perform(#selector(stopRefresh), with: nil, afterDelay: 2.0)
 	}
 }

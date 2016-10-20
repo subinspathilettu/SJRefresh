@@ -50,6 +50,13 @@ class RefreshView: UIView {
 	var scrollViewBounces: Bool = false
 	var scrollViewInsets: UIEdgeInsets = UIEdgeInsets.zero
 	var refreshCompletion: ((Void) -> Void)?
+	var definiteAnimationCompletion: ((Bool) -> Void)?
+	var percentage: CGFloat = 0.0 {
+		didSet {
+			startAnimation()
+		}
+	}
+	var animationCompletedPercentage: CGFloat = 0.0
 	let animationDuration: Double = 0.5
 
 	var state: PullToRefreshState = PullToRefreshState.pulling {
@@ -242,7 +249,7 @@ class RefreshView: UIView {
 		case .Custom:
 
 			animationView?.isHidden = false
-			animationView?.startAnimating()
+			startAnimation()
 		}
 
 		self.arrow?.isHidden = true
@@ -251,7 +258,7 @@ class RefreshView: UIView {
 		}
 		scrollViewBounces = scrollView.bounces
 		scrollViewInsets = scrollView.contentInset
-
+ 
 		var insets = scrollView.contentInset
 		insets.top += self.frame.size.height
 
@@ -266,6 +273,61 @@ class RefreshView: UIView {
 
 						self.refreshCompletion?()
 		})
+	}
+
+	func animationStartIndex(_ completedPercentage: CGFloat) -> Int {
+
+		var percentage = completedPercentage
+		if percentage > self.percentage {
+
+			percentage = self.percentage
+		}
+		let count = animationView?.animationImages?.count
+		let index = options.definite ? Int(CGFloat(count!) * (percentage / 100.0)) : 0
+		return Int(index)
+	}
+
+	func animationEndIndex(_ options: RefreshViewOptions) -> Int {
+
+		let count = animationView?.animationImages?.count
+		let index = options.definite ? Int(CGFloat(count!) * (percentage / 100.0)) : count!
+		return Int(index)
+	}
+
+	func animationImages() -> [CGImage] {
+
+		var images = [CGImage]()
+		let count = animationView?.animationImages?.count
+		let startIndex = animationStartIndex(animationCompletedPercentage)
+		let endIndex = animationEndIndex(options)
+
+		for index in startIndex..<endIndex {
+
+			let image = animationView?.animationImages?[index]
+			images.append((image?.cgImage!)!)
+		}
+
+		return images
+	}
+
+	func repeatCount() -> Float {
+
+		return options.definite ? 0.0 : Float.infinity
+	}
+
+	func startAnimation() {
+
+		let animation = CAKeyframeAnimation()
+		animation.keyPath = "contents"
+		animation.values = animationImages()
+		animation.repeatCount = repeatCount()
+		animation.duration = animationDuration
+		animation.delegate = self
+
+		animationView?.layer.add(animation, forKey: "contents")
+		var index = animationEndIndex(options)
+		index = index > 0 ? index - 1 : index
+		animationView?.image = animationView?.animationImages?[index]
 	}
 
 	func stopAnimating() {
@@ -306,5 +368,17 @@ class RefreshView: UIView {
 		UIView.animate(withDuration: 0.2, animations: {
 			self.arrow?.transform = CGAffineTransform.identity
 		})
+	}
+}
+
+extension RefreshView: CAAnimationDelegate {
+
+	func animationDidStart(_ anim: CAAnimation) {
+	}
+
+	func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+
+		animationCompletedPercentage = percentage
+		definiteAnimationCompletion?(true)
 	}
 }

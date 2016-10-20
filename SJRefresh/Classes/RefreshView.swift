@@ -5,11 +5,11 @@
 //  Created by Subins Jose on 05/10/16.
 //  Copyright © 2016 Subins Jose. All rights reserved.
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
-//    associated documentation files (the "Software"), to deal in the Software without restriction,
-//    including without limitation the rights to use, copy, modify, merge, publish, distribute,
-//    sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
-//    furnished to do so, subject to the following conditions:
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+//    and associated documentation files (the "Software"), to deal in the Software without
+//	  restriction, including without limitation the rights to use, copy, modify, merge, publish,
+//    distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom
+//	  the Software is furnished to do so, subject to the following conditions:
 //
 //  The above copyright notice and this permission notice shall be included in all copies or
 //    substantial portions of the Software.
@@ -27,21 +27,23 @@ enum RefreshType {
 	case Default, Custom
 }
 
+enum PullToRefreshState {
+
+	case pulling
+	case triggered
+	case refreshing
+	case stop
+	case finish
+}
+
+let contentOffsetKeyPath = "contentOffset"
+let contentSizeKeyPath = "contentSize"
+var kvoContext = "PullToRefreshKVOContext"
+
 class RefreshView: UIView {
 
-	enum PullToRefreshState {
-
-		case pulling
-		case triggered
-		case refreshing
-		case stop
-		case finish
-	}
-
 	// MARK: Variables
-	let contentOffsetKeyPath = "contentOffset"
-	let contentSizeKeyPath = "contentSize"
-	var kvoContext = "PullToRefreshKVOContext"
+
 	var type = RefreshType.Default
 	var options: RefreshViewOptions
 	var arrow: UIImageView?
@@ -103,7 +105,7 @@ class RefreshView: UIView {
 	}
 
 	init(options: RefreshViewOptions,
-	     refreshCompletion :((Void) -> Void)?) {
+	     refreshCompletion: ((Void) -> Void)?) {
 
 		let refreshViewFrame = CGRect(x: 0,
 		                              y: -options.viewHeight,
@@ -232,7 +234,7 @@ class RefreshView: UIView {
 	class func getAnimationImages(_ options: RefreshViewOptions) -> [UIImage] {
 
 		var animationImages = options.animationImages
-		if let gifImage = options.gifImage  {
+		if let gifImage = options.gifImage {
 
 			animationImages = UIImage.imagesFromGif(name: gifImage)
 		}
@@ -258,7 +260,7 @@ class RefreshView: UIView {
 		}
 		scrollViewBounces = scrollView.bounces
 		scrollViewInsets = scrollView.contentInset
- 
+
 		var insets = scrollView.contentInset
 		insets.top += self.frame.size.height
 

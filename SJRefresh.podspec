@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
   spec.homepage         = 'https://code.qburst.com/subinsjose/SJRefreshControl'
   spec.license          = { :type => 'MIT', :file => 'LICENSE' }
   spec.author           = { 'Subins Jose' => 'subinsjose@qburst.com' }
-  spec.source           = { :git => 'https://code.qburst.com/subinsjose/SJRefreshControl.git', :tag => spec.version.to_s }
+  spec.source           = { :git => 'https://code.qburst.com/subinsjose/SJRefreshControl.git', :tag => 'v1.0.0' }
   spec.social_media_url = 'https://twitter.com/subinsjose'
   spec.ios.deployment_target = '9.0'
   spec.source_files     = 'SJRefresh/Classes/**/*'

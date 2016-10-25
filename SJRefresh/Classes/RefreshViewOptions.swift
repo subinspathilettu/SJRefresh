@@ -43,11 +43,6 @@ open class RefreshViewOptions: NSObject {
 	open var animationImages: [UIImage]?
 
 	/**
-	* Set color for animation indicator. Default grey.
-	*/
-	open var indicatorColor = UIColor.gray
-
-	/**
 	* Set height for refresh view. Default height is 80.
 	*/
 	open var viewHeight: CGFloat = 80.0

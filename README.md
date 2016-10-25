@@ -30,7 +30,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-pod ’SJRefresh’, ‘0.0.1'
+pod ’SJRefresh’, ‘1.0.0'
 end
 ```
 
@@ -47,9 +47,40 @@ $ pod install
 
 iOS 9.0+, Swift 3+
 
+## Usage
+
+Here is how you can use SJRefresh. 
+
+* Definite Refresh Animation
+```
+let options = RefreshViewOptions()
+options.gifImage = "Loader"
+options.definite = true
+
+tableView.addRefreshView(options: options) { _ in
+
+	//Your code here
+	self.tableView.setRefreshPrecentage(60)
+	...
+	self.tableView.setRefreshPrecentage(100)
+}
+```
+
+* InDefinite Refresh Animation
+```
+let options = RefreshViewOptions()
+options.gifImage = "Loader"
+
+tableView.addRefreshView(options: options) { _ in
+
+	//Your code here
+	self.tableView.stopPullRefresh()
+}
+```
+
 ## Author
 
-Subins Jose, subinsjose@qburst.com
+Subins Jose, subinsjose@gmail.com
 
 ## License
 

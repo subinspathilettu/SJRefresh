@@ -58,25 +58,27 @@ public extension UIScrollView {
 	/**
 	* Method for stop refreshview animations.
 	*/
-	public func stopPullRefreshEver(_ ever: Bool = false) {
+	public func stopPullRefresh() {
 
 		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
-		if ever {
-			refreshView?.state = .finish
-		} else {
-			refreshView?.state = .stop
-		}
+		refreshView?.state = .stop
 	}
 
 	/**
 	* Method for set refresh percentage.
 	*/
-	public func setRefreshPrecentage(_ percentage: CGFloat,
-	                                 completion: ((Bool) -> Void)?) {
+	public func setRefreshPrecentage(_ percentage: CGFloat) {
 
 		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
-		refreshView?.percentage = percentage
-		refreshView?.definiteAnimationCompletion = completion
+
+		if (refreshView?.options.definite)! {
+
+			refreshView?.percentage = percentage
+		} else {
+
+			print("Invalid function call. \"setRefreshPrecentage\" "
+				+ "is not required for definite refresh.")
+		}
 	}
 
 	/**

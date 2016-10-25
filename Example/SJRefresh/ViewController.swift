@@ -23,20 +23,23 @@ class ViewController: UIViewController {
 
 		tableView.addRefreshView(options: options) { _ in
 
-			self.tableView.setRefreshPrecentage(20, completion: { (status) in
-				sleep(1)
-				self.tableView.setRefreshPrecentage(50, completion: { (status) in
-					sleep(1)
-					self.tableView.setRefreshPrecentage(100, completion: { (status) in
-						self.tableView.stopPullRefreshEver()
-					})
-				})
-			})
+			if options.definite == true {
+
+				self.tableView.setRefreshPrecentage(60)
+				self.perform(#selector(self.animate),
+				             with: nil,
+				             afterDelay: 2.0)
+			} else {
+
+				sleep(2)
+				self.tableView.stopPullRefresh()
+			}
 		}
 	}
 
-	func stopRefresh() {
-		tableView.stopPullRefreshEver()
+	func animate() {
+
+		tableView.setRefreshPrecentage(100)
 	}
 }
 
@@ -44,13 +47,11 @@ extension ViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-		//Temp count
 		return 20
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-		//Temp cell
 		let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier")
 		cell?.textLabel?.text = String(indexPath.row)
 		return cell!

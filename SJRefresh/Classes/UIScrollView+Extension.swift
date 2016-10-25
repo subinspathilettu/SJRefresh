@@ -37,7 +37,7 @@ public extension UIScrollView {
 	/**
 	* Method for add refreshview to scrollview.
 	*/
-	open func addRefreshView( options: RefreshViewOptions,
+	public func addRefreshView( options: RefreshViewOptions,
 	                          refreshCompletion: ((Void) -> Void)?) {
 
 		let refreshView = RefreshView(options: options,

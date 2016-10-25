@@ -298,7 +298,6 @@ class RefreshView: UIView {
 	func getAnimationImages(_ percentage: CGFloat) -> [CGImage] {
 
 		var images = [CGImage]()
-		let count = animationView?.animationImages?.count
 		let startIndex = getAnimationStartIndex(animationPercentage)
 		let endIndex = getAnimationEndIndex(options, percentage: percentage)
 

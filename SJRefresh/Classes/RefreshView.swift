@@ -73,10 +73,8 @@ class RefreshView: UIView {
 				}
 			case .refreshing:
 				startAnimating()
-			case .pulling: //starting point
-				arrowRotationBack()
-			case .triggered:
-				arrowRotation()
+			case .pulling, .triggered:
+				rotatePullImage(state)
 			}
 		}
 	}
@@ -103,11 +101,9 @@ class RefreshView: UIView {
 		self.options = options
 		self.refreshCompletion = refreshCompletion
 
-		arrow = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-		arrow?.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-
 		if options.pullImage != nil {
-			arrow?.image = UIImage(named: options.pullImage!)
+			arrow = UIImageView.init(image: UIImage(named: options.pullImage!))
+			arrow?.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
 		}
 
 		let animationImages = RefreshView.getAnimationImages(options)
@@ -348,18 +344,14 @@ class RefreshView: UIView {
 		)
 	}
 
-	func arrowRotation() {
-
-		UIView.animate(withDuration: 0.2, delay: 0, options:[], animations: {
-			// -0.0000001 for the rotation direction control
-			self.arrow?.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI-0.0000001))
-			}, completion:nil)
-	}
-
-	func arrowRotationBack() {
+	func rotatePullImage(_ state: PullToRefreshState) {
 
 		UIView.animate(withDuration: 0.2, animations: {
-			self.arrow?.transform = CGAffineTransform.identity
+			var transform = CGAffineTransform.identity
+			if state == PullToRefreshState.triggered {
+				transform = CGAffineTransform(rotationAngle: CGFloat(M_PI))
+			}
+			self.arrow?.transform = transform
 		})
 	}
 }

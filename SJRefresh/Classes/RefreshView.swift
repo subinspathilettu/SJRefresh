@@ -36,10 +36,10 @@ class RefreshView: UIView {
 	fileprivate var animationCompletion: AnimationCompleteCallback?
 	fileprivate var arrow: UIImageView?
 	fileprivate var animationView: UIImageView?
-	fileprivate var scrollViewBounces: Bool = false
-	fileprivate var scrollViewInsets: UIEdgeInsets = UIEdgeInsets.zero
 	fileprivate var animationPercentage: CGFloat = 0.0
 	fileprivate let animationDuration: Double = 0.5
+	fileprivate var scrollViewBounces = false
+	fileprivate var scrollViewInsets = UIEdgeInsets.zero
 
 	internal var options: RefreshViewOptions
 	internal var percentage: CGFloat = 0.0 {
@@ -48,7 +48,7 @@ class RefreshView: UIView {
 		}
 	}
 
-	internal var state: PullToRefreshState = PullToRefreshState.pulling {
+	internal var state = PullToRefreshState.pulling {
 		didSet {
 
 			if self.state == oldValue || animationView?.animationImages?.count == 0 {

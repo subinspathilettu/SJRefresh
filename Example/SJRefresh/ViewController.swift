@@ -25,21 +25,26 @@ class ViewController: UIViewController {
 
 			if options.definite == true {
 
+				//definite animation
 				self.tableView.setRefreshPrecentage(60)
-				self.perform(#selector(self.animate),
-				             with: nil,
+				self.perform(#selector(self.animate(_:)),
+				             with: 80.0,
 				             afterDelay: 2.0)
+				self.perform(#selector(self.animate(_:)),
+				             with: 100.0,
+				             afterDelay: 3.0)
 			} else {
 
+				// Indefinite animation
 				sleep(2)
 				self.tableView.stopPullRefresh()
 			}
 		}
 	}
 
-	func animate() {
+	func animate(_ percentage: NSNumber) {
 
-		tableView.setRefreshPrecentage(100)
+		tableView.setRefreshPrecentage(CGFloat(percentage.floatValue))
 	}
 }
 

@@ -2,4 +2,6 @@ use_frameworks!
 
 target 'SJRefresh_Example' do
   pod 'SJRefresh', :path => '../'
+  pod 'Alamofire', '4.0.1'
+  pod 'AlamofireImage', '3.1'
 end

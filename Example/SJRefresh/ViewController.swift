@@ -8,10 +8,13 @@
 
 import UIKit
 import SJRefresh
+import Alamofire
+import AlamofireImage
 
 class ViewController: UIViewController {
 
 	@IBOutlet weak var tableView: UITableView!
+	var items = [AnyObject]()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -19,24 +22,15 @@ class ViewController: UIViewController {
 		let options = RefreshViewOptions()
 		options.pullImage = "pulltorefresharrow"
 		options.gifImage = "Loader"
-		options.definite = true
 
 		tableView.addRefreshView(options: options) { _ in
+			Alamofire.request("https://www.googleapis.com/books/v1/volumes?q=crime")
+				.responseJSON { response in
+				if let JSON = response.result.value as? [String : AnyObject] {
+					self.items = JSON["items"] as! [AnyObject]
+				}
 
-			if options.definite == true {
-
-				//definite animation
-				self.tableView.setRefreshPrecentage(60)
-				self.perform(#selector(self.animate(_:)),
-				             with: 80.0,
-				             afterDelay: 2.0)
-				self.perform(#selector(self.animate(_:)),
-				             with: 100.0,
-				             afterDelay: 3.0)
-			} else {
-
-				// Indefinite animation
-				sleep(2)
+				self.tableView.reloadData()
 				self.tableView.stopPullRefresh()
 			}
 		}
@@ -52,13 +46,27 @@ extension ViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-		return 20
+		return items.count
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
 		let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier")
-		cell?.textLabel?.text = String(indexPath.row)
+
+		let item = items[indexPath.row] as? [String : AnyObject]
+		let volumInfo = item?["volumeInfo"] as? [String : AnyObject]
+		let imageLinks = volumInfo?["imageLinks"] as? [String : String]
+		let thumbNailImage = imageLinks?["thumbnail"]
+
+		cell?.textLabel?.text = volumInfo?["title"] as? String
+		cell?.detailTextLabel?.text = volumInfo?["description"] as? String
+
+		Alamofire.request(thumbNailImage!).responseImage { response in
+			if let image = response.result.value {
+				cell?.imageView?.image = image
+			}
+		}
+
 		return cell!
 	}
 }

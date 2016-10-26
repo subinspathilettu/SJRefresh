@@ -16,8 +16,6 @@ SJRefresh is a light weight generic pull to refresh controller written in Swift 
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-## Requirements
-
 ## Installation
 
 ### Using CocoaPods:

@@ -5,7 +5,9 @@
 [![License](https://img.shields.io/cocoapods/l/SJRefresh.svg?style=flat)](http://cocoapods.org/pods/SJRefresh)
 [![Platform](https://img.shields.io/cocoapods/p/SJRefresh.svg?style=flat)](http://cocoapods.org/pods/SJRefresh)
 
-SJRefresh is a light weight generic pull to refresh controller written in Swift 3.
+SJRefresh is a light weight generic pull to refresh written in Swift 3.
+
+![sample_gif](https://github.com/subinspathilettu/SJRefresh/blob/master/Example/pulltorefresh.gif)
 
 #### Highlights
 

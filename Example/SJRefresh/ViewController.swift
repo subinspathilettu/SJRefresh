@@ -49,7 +49,8 @@ extension ViewController: UITableViewDataSource {
 		return items.count
 	}
 
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+	func tableView(_ tableView: UITableView, cellForRowAt
+		indexPath: IndexPath) -> UITableViewCell {
 
 		let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier")
 
@@ -60,12 +61,10 @@ extension ViewController: UITableViewDataSource {
 
 		cell?.textLabel?.text = volumInfo?["title"] as? String
 		cell?.detailTextLabel?.text = volumInfo?["description"] as? String
-
-		Alamofire.request(thumbNailImage!).responseImage { response in
-			if let image = response.result.value {
-				cell?.imageView?.image = image
-			}
-		}
+		cell?.imageView?.af_setImage(withURL: URL.init(string: thumbNailImage!)!,
+		                             placeholderImage: nil,
+		                             completion: { (image) in
+		})
 
 		return cell!
 	}

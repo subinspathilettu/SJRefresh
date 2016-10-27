@@ -1,6 +1,6 @@
 # SJRefresh
 
-[![CI Status](http://img.shields.io/travis/Subins Jose/SJRefresh.svg?style=flat)](https://travis-ci.org/Subins Jose/SJRefresh)
+[![CI Status](https://img.shields.io/travis/subinspathilettu/SJRefresh.svg?style=flat)](https://travis-ci.org/subinspathilettu/SJRefresh)
 [![Version](https://img.shields.io/cocoapods/v/SJRefresh.svg?style=flat)](http://cocoapods.org/pods/SJRefresh)
 [![License](https://img.shields.io/cocoapods/l/SJRefresh.svg?style=flat)](http://cocoapods.org/pods/SJRefresh)
 [![Platform](https://img.shields.io/cocoapods/p/SJRefresh.svg?style=flat)](http://cocoapods.org/pods/SJRefresh)

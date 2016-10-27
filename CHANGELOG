@@ -1,1 +1,8 @@
-v1.0.0
+# Change Log
+All notable changes to this project will be documented in this file. 
+`SJRefresh` adheres to [Semantic Versioning](http://semver.org/).
+
+#### 1.x Releases
+
+#### `1.0.0`
+* Initial release

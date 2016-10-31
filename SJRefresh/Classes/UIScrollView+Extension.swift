@@ -36,6 +36,19 @@ public extension UIScrollView {
 
 	/**
 	* Method for add refreshview to scrollview.
+	* 
+	* - parameter theme: custom RefreshViewThemeProtocol.
+	* - parameter refreshCompletion: Refresh start callback.
+	*/
+	public func addRefreshView<T: RefreshViewThemeProtocol>( theme: T,
+	                           refreshCompletion: ((Void) -> Void)?) {
+	}
+
+	/**
+	* Method for add refreshview to scrollview.
+	*
+	* - parameter options: custom RefreshViewOptions to customise refresh view.
+	* - parameter refreshCompletion: Refresh start callback.
 	*/
 	public func addRefreshView( options: RefreshViewOptions,
 	                          refreshCompletion: ((Void) -> Void)?) {

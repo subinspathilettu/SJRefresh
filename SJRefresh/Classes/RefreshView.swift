@@ -34,7 +34,7 @@ class RefreshView: UIView {
 	// MARK: Variables
 	fileprivate var refreshCompletion: RefreshCompletionCallback?
 	fileprivate var animationCompletion: AnimationCompleteCallback?
-	fileprivate var arrow: UIImageView?
+	fileprivate var arrow = UIImageView()
 	fileprivate var animationView: UIImageView?
 	fileprivate var animationPercentage: CGFloat = 0.0
 	fileprivate let animationDuration: Double = 0.5
@@ -101,10 +101,17 @@ class RefreshView: UIView {
 		self.options = options
 		self.refreshCompletion = refreshCompletion
 
-		if options.pullImage != nil {
-			arrow = UIImageView.init(image: UIImage(named: options.pullImage!))
-			arrow?.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+		if options.pullImage == nil {
+			if let image = UIImage(named: "Arrow", in: Bundle(for: type(of: self)),
+			                       compatibleWith: nil) {
+				arrow.image = image
+			}
+		} else {
+			arrow.image = UIImage(named: options.pullImage!)
 		}
+
+		arrow.frame.size = (arrow.image?.size)!
+		arrow.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
 
 		let animationImages = RefreshView.getAnimationImages(options)
 		var animationframe = CGRect.zero
@@ -123,10 +130,7 @@ class RefreshView: UIView {
 		super.init(frame: refreshViewFrame)
 		self.frame = refreshViewFrame
 		addSubview(animationView!)
-
-		if arrow != nil {
-			addSubview(arrow!)
-		}
+		addSubview(arrow)
 		autoresizingMask = .flexibleWidth
 	}
 
@@ -134,8 +138,8 @@ class RefreshView: UIView {
 		super.layoutSubviews()
 		let center = CGPoint(x: UIScreen.main.bounds.size.width / 2,
 		                     y: self.frame.size.height / 2)
-		self.arrow?.center = center
-		self.arrow?.frame = (arrow?.frame.offsetBy(dx: 0, dy: 0))!
+		arrow.center = center
+		arrow.frame = arrow.frame.offsetBy(dx: 0, dy: 0)
 
 		animationView?.center = center
 	}
@@ -252,7 +256,7 @@ class RefreshView: UIView {
 		animationView?.isHidden = false
 		startAnimation(nil)
 
-		self.arrow?.isHidden = true
+		arrow.isHidden = true
 		guard let scrollView = superview as? UIScrollView else {
 			return
 		}
@@ -329,7 +333,7 @@ class RefreshView: UIView {
 		percentage = 0.0
 		animationView?.isHidden = true
 		animationView?.stopAnimating()
-		arrow?.isHidden = false
+		arrow.isHidden = false
 		guard let scrollView = superview as? UIScrollView else {
 			return
 		}
@@ -337,7 +341,7 @@ class RefreshView: UIView {
 		UIView.animate(withDuration: animationDuration,
 		               animations: {
 						scrollView.contentInset = self.scrollViewInsets
-						self.arrow?.transform = CGAffineTransform.identity
+						self.arrow.transform = CGAffineTransform.identity
 			}, completion: { _ in
 				self.state = .pulling
 			}
@@ -351,7 +355,7 @@ class RefreshView: UIView {
 			if state == PullToRefreshState.triggered {
 				transform = CGAffineTransform(rotationAngle: CGFloat(M_PI))
 			}
-			self.arrow?.transform = transform
+			self.arrow.transform = transform
 		})
 	}
 }

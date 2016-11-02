@@ -20,7 +20,6 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 
 		let options = RefreshViewOptions()
-		options.pullImage = "pulltorefresharrow"
 		options.gifImage = "Loader"
 
 		tableView.addRefreshView(options: options) { _ in

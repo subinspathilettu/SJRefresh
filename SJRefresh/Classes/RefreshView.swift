@@ -107,9 +107,11 @@ class RefreshView: UIView {
 	}
 
 	init<T: RefreshViewThemeProtocol>(theme: T,
+	     definite: Bool,
 	     refreshCompletion: RefreshCompletionCallback?) {
 
 		self.options = RefreshViewOptions()
+		options.definite = definite
 		options.pullImage = theme.pullImageForRefreshView!()
 		options.animationImages = theme.loadingImagesForRefreshView()
 		self.refreshCompletion = refreshCompletion

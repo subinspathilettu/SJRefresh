@@ -19,7 +19,8 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		tableView.addRefreshView { (_) in
+		tableView.addRefreshView(definite: false,
+		                         refreshCompletion: { (_) in
 			Alamofire.request("https://www.googleapis.com/books/v1/volumes?q=crime")
 				.responseJSON { response in
 					if let JSON = response.result.value as? [String : AnyObject] {
@@ -29,7 +30,7 @@ class ViewController: UIViewController {
 					self.tableView.reloadData()
 					self.tableView.stopPullRefresh()
 			}
-		}
+		})
 	}
 
 	func animate(_ percentage: NSNumber) {

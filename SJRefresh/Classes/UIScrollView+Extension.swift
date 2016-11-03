@@ -41,9 +41,11 @@ public extension UIScrollView {
 	* - parameter refreshCompletion: Refresh start callback.
 	*/
 	public func addRefreshView<T: RefreshViewThemeProtocol>(theme theme: T,
+	                           definite: Bool,
 	                           refreshCompletion: ((Void) -> Void)?) {
 
 		let refreshView = RefreshView(theme: theme,
+		                              definite: definite,
 		                              refreshCompletion: refreshCompletion)
 		refreshView.tag = RefreshConst.pullTag
 		addSubview(refreshView)
@@ -55,7 +57,7 @@ public extension UIScrollView {
 	* - parameter options: custom RefreshViewOptions to customise refresh view.
 	* - parameter refreshCompletion: Refresh start callback.
 	*/
-	public func addRefreshView(_ options: RefreshViewOptions,
+	public func addRefreshView(options: RefreshViewOptions,
 	                          refreshCompletion: ((Void) -> Void)?) {
 
 		let refreshView = RefreshView(options: options,
@@ -69,9 +71,11 @@ public extension UIScrollView {
 	*
 	* - parameter refreshCompletion: Refresh start callback.
 	*/
-	public func addRefreshView(_ refreshCompletion: ((Void) -> Void)?) {
+	public func addRefreshView(definite: Bool,
+	                           refreshCompletion: ((Void) -> Void)?) {
 
 		let options = RefreshViewOptions()
+		options.definite = definite
 		let refreshView = RefreshView(options: options,
 		                              refreshCompletion: refreshCompletion)
 		refreshView.tag = RefreshConst.pullTag

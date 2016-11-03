@@ -11,8 +11,8 @@ SJRefresh is a light weight generic pull to refresh written in Swift 3.
 
 #### Highlights
 
-* Supports custom animation.
-* Supports gif.
+* Supports custom animation
+* Supports gif
 
 ## Example
 
@@ -40,7 +40,7 @@ $ pod install
 ```
 ### Manually:
 
-* Download SJRefresh.
+* Download SJRefresh
 * Drag and drop SJRefresh directory to your project
 
 ## Requirements
@@ -53,29 +53,52 @@ Here is how you can use SJRefresh.
 
 * Definite Refresh Animation
 ```
-let options = RefreshViewOptions()
-options.gifImage = "Loader"
-options.definite = true
-
-tableView.addRefreshView(options: options) { _ in
+tableView.addRefreshView(definite: true,
+		                 refreshCompletion: { (_) in
 
 	//Your code here
 	self.tableView.setRefreshPrecentage(60)
 	...
 	self.tableView.setRefreshPrecentage(100)
-}
+})
 ```
 
 * InDefinite Refresh Animation
 ```
-let options = RefreshViewOptions()
-options.gifImage = "Loader"
-
-tableView.addRefreshView(options: options) { _ in
+tableView.addRefreshView(definite: false,
+		                 refreshCompletion: { (_) in
 
 	//Your code here
 	self.tableView.stopPullRefresh()
-}
+})
+```
+
+#### Customize SJRefreshView
+You can provide your custom pull image and animation images for SJRefresh.
+
+```
+let options = RefreshViewOptions()
+options.pullImage = "pullImage"
+options.animationImages = animationImages
+options.viewHeight = 100 // Default 80
+options.definite = false // Default false. true for definite animation.
+
+tableView.addRefreshView(options: options,
+                         refreshCompletion: { (_) in
+
+							// Your code here
+							self.tableView.stopPullRefresh()
+})
+```
+
+SJRefresh supports gif file also. You can provide gif for animation
+```
+let options = RefreshViewOptions()
+options.animationImages = animationImages
+
+or 
+
+options.gifImage = "gifImage"
 ```
 
 ## Author

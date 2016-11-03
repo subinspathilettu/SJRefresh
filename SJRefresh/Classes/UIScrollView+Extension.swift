@@ -42,6 +42,11 @@ public extension UIScrollView {
 	*/
 	public func addRefreshView<T: RefreshViewThemeProtocol>(theme theme: T,
 	                           refreshCompletion: ((Void) -> Void)?) {
+
+		let refreshView = RefreshView(theme: theme,
+		                              refreshCompletion: refreshCompletion)
+		refreshView.tag = RefreshConst.pullTag
+		addSubview(refreshView)
 	}
 
 	/**

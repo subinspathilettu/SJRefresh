@@ -35,7 +35,7 @@ class RefreshView: UIView {
 	fileprivate var refreshCompletion: RefreshCompletionCallback?
 	fileprivate var animationCompletion: AnimationCompleteCallback?
 	fileprivate var arrow = UIImageView()
-	fileprivate var animationView: UIImageView?
+	fileprivate var animationView = UIImageView()
 	fileprivate var animationPercentage: CGFloat = 0.0
 	fileprivate let animationDuration: Double = 0.5
 	fileprivate var scrollViewBounces = false
@@ -51,7 +51,7 @@ class RefreshView: UIView {
 	internal var state = PullToRefreshState.pulling {
 		didSet {
 
-			if self.state == oldValue || animationView?.animationImages?.count == 0 {
+			if self.state == oldValue || animationView.animationImages?.count == 0 {
 				return
 			}
 			switch self.state {
@@ -113,7 +113,10 @@ class RefreshView: UIView {
 		arrow.frame.size = (arrow.image?.size)!
 		arrow.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
 
-		let animationImages = RefreshView.getAnimationImages(options)
+		super.init(frame: refreshViewFrame)
+		self.frame = refreshViewFrame
+
+		let animationImages = getAnimationImages(options: options)
 		var animationframe = CGRect.zero
 
 		if !animationImages.isEmpty {
@@ -122,14 +125,11 @@ class RefreshView: UIView {
 		}
 
 		animationView = UIImageView(frame: animationframe)
-		animationView?.animationImages = animationImages
-		animationView?.contentMode = .scaleAspectFit
-		animationView?.animationDuration = 0.5
-		animationView?.isHidden = true
-
-		super.init(frame: refreshViewFrame)
-		self.frame = refreshViewFrame
-		addSubview(animationView!)
+		animationView.animationImages = animationImages
+		animationView.contentMode = .scaleAspectFit
+		animationView.animationDuration = 0.5
+		animationView.isHidden = true
+		addSubview(animationView)
 		addSubview(arrow)
 		autoresizingMask = .flexibleWidth
 	}
@@ -141,7 +141,7 @@ class RefreshView: UIView {
 		arrow.center = center
 		arrow.frame = arrow.frame.offsetBy(dx: 0, dy: 0)
 
-		animationView?.center = center
+		animationView.center = center
 	}
 
 	override func willMove(toSuperview superView: UIView!) {
@@ -235,25 +235,31 @@ class RefreshView: UIView {
 		}
 	}
 
-	class func getAnimationImages(_ options: RefreshViewOptions) -> [UIImage] {
+	func getAnimationImages(options options: RefreshViewOptions) -> [UIImage] {
 
 		var animationImages = options.animationImages
 		if let gifImage = options.gifImage {
 
-			animationImages = UIImage.imagesFromGif(name: gifImage)
+			animationImages = UIImage.imagesFromGif(gifImage)
 		}
 
 		if animationImages == nil {
-			print("Neither RefreshViewOptions.gifImage nor" +
-				" RefreshViewOptions.animationImages should not be nil")
-			animationImages = [UIImage]()
+
+			var images = [UIImage]()
+			for index in 0...100 {
+				if let image = UIImage(named: "loader\(index)", in: Bundle(for: type(of: self)),
+				                       compatibleWith: nil) {
+					images.append(image)
+				}
+			}
+			animationImages = images
 		}
 		return animationImages!
 	}
 
 	func startAnimating() {
 
-		animationView?.isHidden = false
+		animationView.isHidden = false
 		startAnimation(nil)
 
 		arrow.isHidden = true
@@ -282,7 +288,7 @@ class RefreshView: UIView {
 		if percentage > self.percentage {
 			percentage = self.percentage
 		}
-		let count = animationView?.animationImages?.count
+		let count = animationView.animationImages?.count
 		let index = options.definite ? Int(CGFloat(count!) * (percentage / 100.0)) : 0
 		return Int(index)
 	}
@@ -290,7 +296,7 @@ class RefreshView: UIView {
 	func getAnimationEndIndex(_ options: RefreshViewOptions,
 	                          percentage: CGFloat) -> Int {
 
-		let count = animationView?.animationImages?.count
+		let count = animationView.animationImages?.count
 		let index = options.definite ? Int(CGFloat(count!) * (percentage / 100.0)) : count!
 		return Int(index)
 	}
@@ -302,7 +308,7 @@ class RefreshView: UIView {
 		let endIndex = getAnimationEndIndex(options, percentage: percentage)
 
 		for index in startIndex..<endIndex {
-			let image = animationView?.animationImages?[index]
+			let image = animationView.animationImages?[index]
 			images.append((image?.cgImage!)!)
 		}
 
@@ -319,11 +325,11 @@ class RefreshView: UIView {
 		animation.duration = animationDuration
 		animation.delegate = self
 
-		animationView?.layer.add(animation, forKey: "contents")
+		animationView.layer.add(animation, forKey: "contents")
 		var index = getAnimationEndIndex(options,
 		                                 percentage: percentage)
 		index = index > 0 ? index - 1 : index
-		animationView?.image = animationView?.animationImages?[index]
+		animationView.image = animationView.animationImages?[index]
 		animationPercentage = percentage
 	}
 
@@ -331,8 +337,8 @@ class RefreshView: UIView {
 
 		animationPercentage = 0.0
 		percentage = 0.0
-		animationView?.isHidden = true
-		animationView?.stopAnimating()
+		animationView.isHidden = true
+		animationView.stopAnimating()
 		arrow.isHidden = false
 		guard let scrollView = superview as? UIScrollView else {
 			return

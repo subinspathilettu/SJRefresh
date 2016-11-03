@@ -26,7 +26,7 @@ import ImageIO
 
 extension UIImage {
 
-	class func imagesFromGif(name: String) -> [UIImage]? {
+	class func imagesFromGif(_ name: String) -> [UIImage]? {
 
 		// Check for existance of gif
 		guard let bundleURL = Bundle.main
@@ -35,14 +35,24 @@ extension UIImage {
 				return nil
 		}
 
+		return UIImage.imagesFromGifURL(bundleURL)
+	}
+
+	class func imagesFromGifURL(_ url: URL) -> [UIImage]? {
+
 		// Validate data
-		guard let imageData = try? Data(contentsOf: bundleURL) else {
-			print("SwiftGif: Cannot turn image named \"\(name)\" into NSData")
+		guard let imageData = try? Data(contentsOf: url) else {
+			print("SwiftGif: Cannot turn image named \"\(url)\" into NSData")
 			return nil
 		}
 
+		return UIImage.imagesFromGifData(imageData)
+	}
+
+	class func imagesFromGifData(_ data: Data) -> [UIImage]? {
+
 		// Create source from data
-		guard let source = CGImageSourceCreateWithData(imageData as CFData, nil) else {
+		guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
 			print("SwiftGif: Source for the image does not exist")
 			return nil
 		}

@@ -11,8 +11,8 @@ SJRefresh is a light weight generic pull to refresh written in Swift 3.
 
 #### Highlights
 
-* Supports custom animation
-* Supports gif
+- [x] Supports custom animation
+- [x] Supports gif
 
 ## Example
 
@@ -20,10 +20,16 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
-### Using CocoaPods:
+### CocoaPods
 
-SJRefresh is available through [CocoaPods](http://cocoapods.org). To integrate SJRefresh into your Xcode project using CocoaPods, specify it in your Podfile:
-```swift
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
+
+```bash
+$ gem install cocoapods
+```
+
+To integrate SJRefresh into your Xcode project using CocoaPods, specify it in your `Podfile`:
+```ruby
 
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
@@ -35,9 +41,11 @@ end
 ```
 
 Then, run the following command:
-```swift
+
+```bash
 $ pod install
 ```
+
 ### Manually:
 
 * Download SJRefresh
@@ -45,14 +53,21 @@ $ pod install
 
 ## Requirements
 
-iOS 9.0+, Swift 3+
+- iOS 9.0+
+- Swift 3.0+
+
+## Communication
+
+- If you **found a bug**, open an issue.
+- If you **have a feature request**, open an issue.
+- If you **want to contribute**, submit a pull request.
 
 ## Usage
 
 Here is how you can use SJRefresh. 
 
 * Definite Refresh Animation
-```
+```swift
 tableView.addRefreshView(definite: true,
 		                 refreshCompletion: { (_) in
 
@@ -64,7 +79,7 @@ tableView.addRefreshView(definite: true,
 ```
 
 * InDefinite Refresh Animation
-```
+```swift
 tableView.addRefreshView(definite: false,
 		                 refreshCompletion: { (_) in
 
@@ -76,7 +91,7 @@ tableView.addRefreshView(definite: false,
 #### Customize SJRefreshView
 You can provide your custom pull image and animation images for SJRefresh.
 
-```
+```swift
 let options = RefreshViewOptions()
 options.pullImage = "pullImage"
 options.animationImages = animationImages
@@ -92,7 +107,8 @@ tableView.addRefreshView(options: options,
 ```
 
 SJRefresh supports gif file also. You can provide gif for animation
-```
+
+```swift
 let options = RefreshViewOptions()
 options.animationImages = animationImages
 

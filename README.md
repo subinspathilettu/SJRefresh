@@ -11,6 +11,7 @@ SJRefresh is a light weight generic pull to refresh written in Swift 3.
 
 #### Highlights
 
+- [x] Supports multiple themes
 - [x] Supports custom animation
 - [x] Supports gif
 

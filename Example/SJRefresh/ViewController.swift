@@ -19,21 +19,6 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		let options = RefreshViewOptions()
-		options.pullImage = "pullImage"
-		options.animationImages = [UIImage]()
-		options.gifImage = "gifImage"
-		options.viewHeight = 100
-		options.definite = false
-
-		tableView.addRefreshView(options: options,
-		                         refreshCompletion: { (_) in
-
-									// Your code here
-									self.tableView.stopPullRefresh()
-		})
-
-
 		tableView.addRefreshView(definite: false,
 		                         refreshCompletion: { (_) in
 			Alamofire.request("https://www.googleapis.com/books/v1/volumes?q=crime")

@@ -1,8 +1,8 @@
 //
-//  RefreshViewOptions.swift
+//  RefreshManager.swift
 //  Pods
 //
-//  Created by Subins Jose on 05/10/16.
+//  Created by Subins on 04/11/16.
 //  Copyright © 2016 Subins Jose. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -20,35 +20,20 @@
 //  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 //  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import UIKit
+import Foundation
 
-/**
-*  Open class for customizing and setting refresh view.
-*/
-open class RefreshViewOptions: NSObject {
+public class SJRefresh {
 
+	public static let shared = SJRefresh()
+
+	var theme: RefreshViewTheme?
 	/**
-	* Image to show when user pull to refresh.
+	* Method for set refresh theme.
+	*
+	* - parameter theme: Theme for pull image and loading animation image.
 	*/
-	open var pullImage: String?
+	public func setTheme(_ theme: RefreshViewTheme) {
 
-	/**
-	* Gif Image for animation.
-	*/
-	open var gifImage: String?
-
-	/**
-	* Images for animation.
-	*/
-	open var animationImages: [UIImage]?
-
-	/**
-	* Set height for refresh view. Default height is 80.
-	*/
-	open var viewHeight: CGFloat = 80.0
-
-	/**
-	* Set animatoin type. Default false.
-	*/
-	open var definite = false
+		self.theme = theme
+	}
 }

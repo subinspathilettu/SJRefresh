@@ -36,48 +36,14 @@ public extension UIScrollView {
 
 	/**
 	* Method for add refreshview to scrollview.
-	* 
-	* - parameter theme: custom RefreshViewThemeProtocol.
-	* - parameter refreshCompletion: Refresh start callback.
-	*/
-	public func addRefreshView<T: RefreshViewThemeProtocol>(theme theme: T,
-	                           definite: Bool,
-	                           refreshCompletion: ((Void) -> Void)?) {
-
-		let refreshView = RefreshView(theme: theme,
-		                              definite: definite,
-		                              refreshCompletion: refreshCompletion)
-		refreshView.tag = RefreshConst.pullTag
-		addSubview(refreshView)
-	}
-
-	/**
-	* Method for add refreshview to scrollview.
-	*
-	* - parameter options: custom RefreshViewOptions to customise refresh view.
-	* - parameter refreshCompletion: Refresh start callback.
-	*/
-	public func addRefreshView(options: RefreshViewOptions,
-	                          refreshCompletion: ((Void) -> Void)?) {
-
-		let refreshView = RefreshView(options: options,
-		                              refreshCompletion: refreshCompletion)
-		refreshView.tag = RefreshConst.pullTag
-		addSubview(refreshView)
-	}
-
-	/**
-	* Method for add refreshview to scrollview.
 	*
 	* - parameter refreshCompletion: Refresh start callback.
 	*/
 	public func addRefreshView(definite: Bool,
 	                           refreshCompletion: ((Void) -> Void)?) {
 
-		let options = RefreshViewOptions()
-		options.definite = definite
-		let refreshView = RefreshView(options: options,
-		                              refreshCompletion: refreshCompletion)
+		let theme = SJRefresh.shared.theme?.definite = definite
+		let refreshView = RefreshView(refreshCompletion: refreshCompletion)
 		refreshView.tag = RefreshConst.pullTag
 		addSubview(refreshView)
 	}
@@ -107,7 +73,7 @@ public extension UIScrollView {
 
 		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
 
-		if (refreshView?.options.definite)! {
+		if (SJRefresh.shared.theme?.definite)! {
 
 			refreshView?.percentage = percentage
 		} else {

@@ -1,5 +1,5 @@
 //
-//  RefreshViewProtocol.swift
+//  RefreshViewTheme.swift
 //  Pods
 //
 //  Created by Subins Jose on 05/10/16.
@@ -20,19 +20,49 @@
 //  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 //  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import Foundation
+import UIKit
 
-@objc public protocol RefreshViewThemeProtocol: class {
-
-	/**
-	* Theme protocol to get pull image name
-	*/
-	@objc optional func pullImageForRefreshView() -> UIImage
+/**
+*  Public class for customizing and setting refresh view.
+*/
+public class RefreshViewTheme: NSObject {
 
 	/**
-	* Theme protocol to get animation images
+	* Image to show when user pull to refresh.
 	*/
-	func loadingImagesForRefreshView() -> [UIImage]
+	open var pullImage: String?
 
-	init()
+	/**
+	* Gif Image for animation.
+	*/
+	open var gifImage: String?
+
+	/**
+	* Images for animation.
+	*/
+	open var animationImages: [UIImage]?
+
+	/**
+	* Set height for refresh view. Default height is 80.
+	*/
+	open var viewHeight: CGFloat = 80.0
+
+	/**
+	* Set animatoin type. Default false.
+	*/
+	open var definite = false
+
+	public override required init() {
+		super.init()
+	}
+
+	/**
+	* Theme initialiser.
+	*
+	* - parameter isDefinite: set definite animation.
+	*/
+	public convenience init(_ isDefinite: Bool) {
+		self.init()
+		definite = isDefinite
+	}
 }

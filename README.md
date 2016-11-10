@@ -79,7 +79,9 @@ let theme = RefreshViewTheme()
 SJRefresh.shared.setTheme(theme)
 ```
 
-* Definite Refresh Animation
+* Add refresh view to your control,
+
+For definite refresh animation, add following code
 ```swift
 tableView.addRefreshView(definite: true,
 		                 refreshCompletion: { (_) in
@@ -91,7 +93,7 @@ tableView.addRefreshView(definite: true,
 })
 ```
 
-* InDefinite Refresh Animation
+For in definite refresh animation, add following code
 ```swift
 tableView.addRefreshView(definite: false,
 		                 refreshCompletion: { (_) in
@@ -100,6 +102,19 @@ tableView.addRefreshView(definite: false,
 	self.tableView.stopPullRefresh()
 })
 ```
+
+## Customize Refresh View
+
+SJRefresh supports themes. So we can provide custom themes thats support RefreshViewThemeProtocol to SJRefresh
+
+## Themes
+
+* RefreshViewTheme
+* SJTheme
+
+## Contribute 
+
+If you want to contribute themes thats supports SJRefresh, please create as pod library and upload to cocoapods.
 
 ## Author
 

@@ -67,7 +67,7 @@ $ pod install
 
 Here is how you can use SJRefresh. 
 
-* Import SJRefresh to your clas
+* Import SJRefresh to your class
 
 ```swift
 import SJRefresh

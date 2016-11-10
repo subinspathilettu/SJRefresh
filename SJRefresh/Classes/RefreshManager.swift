@@ -26,13 +26,13 @@ public class SJRefresh {
 
 	public static let shared = SJRefresh()
 
-	var theme: RefreshViewTheme?
+	var theme: AnyObject?
 	/**
 	* Method for set refresh theme.
 	*
 	* - parameter theme: Theme for pull image and loading animation image.
 	*/
-	public func setTheme(_ theme: RefreshViewTheme) {
+	public func setTheme(_ theme: AnyObject) {
 
 		self.theme = theme
 	}

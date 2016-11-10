@@ -25,6 +25,7 @@ import UIKit
 let contentOffsetKeyPath = "contentOffset"
 let contentSizeKeyPath = "contentSize"
 var kvoContext = "PullToRefreshKVOContext"
+let refreshViewHeight: CGFloat = 80.0
 
 typealias AnimationCompleteCallback = (_ percentage: CGFloat) -> Void
 typealias RefreshCompletionCallback = (Void) -> Void
@@ -46,6 +47,7 @@ class RefreshView: UIView {
 		}
 	}
 
+	var isDefinite = false
 	var state = PullToRefreshState.pulling {
 		didSet {
 
@@ -90,12 +92,19 @@ class RefreshView: UIView {
 	init(refreshCompletion: RefreshCompletionCallback?) {
 
 		self.refreshCompletion = refreshCompletion
-		let height = SJRefresh.shared.theme?.viewHeight
+
+		var height: CGFloat = refreshViewHeight
+
+		if let themeProtocol = SJRefresh.shared.theme as? RefreshViewThemeProtocol {
+			if let viewHeight = themeProtocol.heightForRefreshView!() as? CGFloat {
+				height = viewHeight
+			}
+		}
 
 		let refreshViewFrame = CGRect(x: 0,
-		                              y: -height!,
+		                              y: -height,
 		                              width: UIScreen.main.bounds.width,
-		                              height: height!)
+		                              height: height)
 
 		super.init(frame: refreshViewFrame)
 		self.frame = refreshViewFrame
@@ -256,7 +265,7 @@ class RefreshView: UIView {
 		var animationImages = [UIImage]()
 		if let themeProtocol = SJRefresh.shared.theme as? RefreshViewThemeProtocol {
 
-			animationImages = themeProtocol.loadingImagesForRefreshView()
+			animationImages = themeProtocol.imagesRefreshViewLoadingAnimation!()
 		} else {
 
 			let bundle = Bundle(for: type(of: self))
@@ -304,14 +313,14 @@ class RefreshView: UIView {
 			percentage = self.percentage
 		}
 		let count = animationView.animationImages?.count
-		let index = (SJRefresh.shared.theme?.definite)! ? Int(CGFloat(count!) * (percentage / 100.0)) : 0
+		let index = isDefinite ? Int(CGFloat(count!) * (percentage / 100.0)) : 0
 		return Int(index)
 	}
 
 	func getAnimationEndIndex(_ percentage: CGFloat) -> Int {
 
 		let count = animationView.animationImages?.count
-		let index = (SJRefresh.shared.theme?.definite)! ? Int(CGFloat(count!) * (percentage / 100.0)) : count!
+		let index = isDefinite ? Int(CGFloat(count!) * (percentage / 100.0)) : count!
 		return Int(index)
 	}
 

@@ -42,9 +42,9 @@ public extension UIScrollView {
 	public func addRefreshView(definite: Bool,
 	                           refreshCompletion: ((Void) -> Void)?) {
 
-		let theme = SJRefresh.shared.theme?.definite = definite
 		let refreshView = RefreshView(refreshCompletion: refreshCompletion)
 		refreshView.tag = RefreshConst.pullTag
+		refreshView.isDefinite = definite
 		addSubview(refreshView)
 	}
 
@@ -73,8 +73,7 @@ public extension UIScrollView {
 
 		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
 
-		if (SJRefresh.shared.theme?.definite)! {
-
+		if refreshView?.isDefinite == true {
 			refreshView?.percentage = percentage
 		} else {
 

@@ -22,17 +22,15 @@
 
 import Foundation
 
-@objc public protocol RefreshViewThemeProtocol: class {
+@objc public protocol RefreshViewThemeProtocol {
 
-	/**
-	* Theme protocol to get pull image name
-	*/
 	@objc optional func pullImageForRefreshView() -> UIImage
 
-	/**
-	* Theme protocol to get animation images
-	*/
-	func loadingImagesForRefreshView() -> [UIImage]
+	@objc optional func backgroundImageForRefreshView() -> UIImage
 
-	init()
+	@objc optional func heightForRefreshView() -> CGFloat
+
+	@objc optional func gifForRefreshViewLoadingAnimation() -> String
+
+	@objc optional func imagesRefreshViewLoadingAnimation() -> [UIImage]
 }

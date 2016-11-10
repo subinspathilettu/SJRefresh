@@ -30,7 +30,7 @@ extension RefreshView {
 		let animation = CAKeyframeAnimation()
 		animation.keyPath = "contents"
 		animation.values = getAnimationImages(percentage)
-		animation.repeatCount = (SJRefresh.shared.theme?.definite)! ? 0.0 : Float.infinity
+		animation.repeatCount = isDefinite ? 0.0 : Float.infinity
 		animation.duration = animationDuration
 		animation.delegate = self
 

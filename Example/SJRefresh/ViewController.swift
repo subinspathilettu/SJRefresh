@@ -19,7 +19,7 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		tableView.addRefreshView(definite: true,
+		tableView.addRefreshView(definite: false,
 		                         refreshCompletion: { (_) in
 			Alamofire.request("https://www.googleapis.com/books/v1/volumes?q=crime")
 				.responseJSON { response in
@@ -27,18 +27,10 @@ class ViewController: UIViewController {
 						self.items = JSON["items"] as! [AnyObject]
 					}
 
-					self.tableView.setRefreshPrecentage(60)
-					self.perform(#selector(self.animate), with: nil,
-					             afterDelay: 2.0)
 					self.tableView.reloadData()
+					self.tableView.stopPullRefresh()
 			}
 		})
-	}
-
-	func animate() {
-
-		self.tableView.reloadData()
-		self.tableView.setRefreshPrecentage(100)
 	}
 }
 

@@ -32,21 +32,21 @@ typealias RefreshCompletionCallback = (Void) -> Void
 class RefreshView: UIView {
 
 	// MARK: Variables
-	 var refreshCompletion: RefreshCompletionCallback?
-	 var animationCompletion: AnimationCompleteCallback?
-	 var arrow = UIImageView()
-	 var animationView = UIImageView()
-	 var animationPercentage: CGFloat = 0.0
-	 let animationDuration: Double = 0.5
-	 var scrollViewBounces = false
-	 var scrollViewInsets = UIEdgeInsets.zero
-	 var percentage: CGFloat = 0.0 {
+	var refreshCompletion: RefreshCompletionCallback?
+	var animationCompletion: AnimationCompleteCallback?
+	var arrow = UIImageView()
+	var animationView = UIImageView()
+	var animationPercentage: CGFloat = 0.0
+	let animationDuration: Double = 0.5
+	var scrollViewBounces = false
+	var scrollViewInsets = UIEdgeInsets.zero
+	var percentage: CGFloat = 0.0 {
 		didSet {
 			self.startAnimation()
 		}
 	}
 
-	 var state = PullToRefreshState.pulling {
+	var state = PullToRefreshState.pulling {
 		didSet {
 
 			if self.state == oldValue || animationView.animationImages?.count == 0 {
@@ -126,14 +126,14 @@ class RefreshView: UIView {
 		                       context: &kvoContext)
 	}
 
-	 func setRefreshView() {
+	func setRefreshView() {
 
 		loadPullToRefreshArrowView()
 		loadAnimationView()
 		autoresizingMask = .flexibleWidth
 	}
 
-	 func loadPullToRefreshArrowView() {
+	func loadPullToRefreshArrowView() {
 
 		if let themeProtocol = SJRefresh.shared.theme as? RefreshViewThemeProtocol {
 			if let image = themeProtocol.pullImageForRefreshView?() {
@@ -150,7 +150,7 @@ class RefreshView: UIView {
 		addSubview(arrow)
 	}
 
-	 func loadAnimationView() {
+	func loadAnimationView() {
 
 		let animationImages = getAnimationImages()
 		var animationframe = CGRect.zero
@@ -173,7 +173,7 @@ class RefreshView: UIView {
 		return UIImage(named: "Arrow", in: Bundle(for: type(of: self)), compatibleWith: nil)!
 	}
 
-	 func animateImages(_ percentage: CGFloat) {
+	func animateImages(_ percentage: CGFloat) {
 
 		if percentage != 0 && percentage > animationPercentage {
 			startAnimation({ (percentage) in
@@ -187,7 +187,7 @@ class RefreshView: UIView {
 		}
 	}
 
-	 func startAnimation() {
+	func startAnimation() {
 
 		if animationPercentage < percentage && percentage != 0 {
 			startAnimation({ (percent) in
@@ -201,7 +201,7 @@ class RefreshView: UIView {
 		}
 	}
 
-	 func removeRegister() {
+	func removeRegister() {
 
 		if let scrollView = superview as? UIScrollView {
 			scrollView.removeObserver(self, forKeyPath: contentOffsetKeyPath, context: &kvoContext)
@@ -251,7 +251,7 @@ class RefreshView: UIView {
 		}
 	}
 
-	 func getAnimationImages() -> [UIImage] {
+	func getAnimationImages() -> [UIImage] {
 
 		var animationImages = [UIImage]()
 		if let themeProtocol = SJRefresh.shared.theme as? RefreshViewThemeProtocol {
@@ -259,12 +259,14 @@ class RefreshView: UIView {
 			animationImages = themeProtocol.loadingImagesForRefreshView()
 		} else {
 
-			for index in 0...100 {
-				if let image = UIImage(named: "loader\(index)", in: Bundle(for: type(of: self)),
-				                       compatibleWith: nil) {
-					animationImages.append(image)
-				}
+			let bundle = Bundle(for: type(of: self))
+			guard let bundleURL = bundle.url(forResource: "loader_triangle",
+			                                 withExtension: "gif") else {
+				print("This image does not exist")
+				return [UIImage]()
 			}
+
+			animationImages =  UIImage.imagesFromGifURL(bundleURL)!
 		}
 
 		return animationImages
@@ -323,7 +325,7 @@ class RefreshView: UIView {
 			let image = animationView.animationImages?[index]
 			images.append((image?.cgImage!)!)
 		}
-
+		
 		return images
 	}
 }

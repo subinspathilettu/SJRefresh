@@ -269,7 +269,7 @@ class RefreshView: UIView {
 		} else {
 
 			let bundle = Bundle(for: type(of: self))
-			guard let bundleURL = bundle.url(forResource: "loader_triangle",
+			guard let bundleURL = bundle.url(forResource: "loader_gear",
 			                                 withExtension: "gif") else {
 				print("This image does not exist")
 				return [UIImage]()

@@ -27,7 +27,6 @@
 		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		60AF37EB87CACFC77FAB3E1A /* SJRefresh.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SJRefresh.podspec; path = ../SJRefresh.podspec; sourceTree = "<group>"; };
-		64C8FB7F1DA66DFF00C9CDAF /* Loader.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Loader.gif; sourceTree = "<group>"; };
 		64FABFBB1DD4520E00546C3F /* refresh_sample.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = refresh_sample.gif; sourceTree = "<group>"; };
 		69B8424B40AAD6FDC73FB541 /* Pods-SJRefresh_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SJRefresh_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SJRefresh_Example/Pods-SJRefresh_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		9F10C25372A49F4433C86BCD /* Pods-SJRefresh_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SJRefresh_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-SJRefresh_Example/Pods-SJRefresh_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -71,7 +70,6 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				64C8FB7F1DA66DFF00C9CDAF /* Loader.gif */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,

@@ -67,6 +67,18 @@ $ pod install
 
 Here is how you can use SJRefresh. 
 
+* Import SJRefresh to your clas
+
+```swift
+import SJRefresh
+```
+* Set your theme in AppDelegate.swift
+
+```swift
+let theme = RefreshViewTheme()
+SJRefresh.shared.setTheme(theme)
+```
+
 * Definite Refresh Animation
 ```swift
 tableView.addRefreshView(definite: true,
@@ -87,35 +99,6 @@ tableView.addRefreshView(definite: false,
 	//Your code here
 	self.tableView.stopPullRefresh()
 })
-```
-
-#### Customize SJRefreshView
-You can provide your custom pull image and animation images for SJRefresh.
-
-```swift
-let options = RefreshViewOptions()
-options.pullImage = "pullImage"
-options.animationImages = animationImages
-options.viewHeight = 100 // Default 80
-options.definite = false // Default false. true for definite animation.
-
-tableView.addRefreshView(options: options,
-                         refreshCompletion: { (_) in
-
-							// Your code here
-							self.tableView.stopPullRefresh()
-})
-```
-
-SJRefresh supports gif file also. You can provide gif for animation
-
-```swift
-let options = RefreshViewOptions()
-options.animationImages = animationImages
-
-or 
-
-options.gifImage = "gifImage"
 ```
 
 ## Author

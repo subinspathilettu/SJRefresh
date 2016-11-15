@@ -21,11 +21,11 @@
 //  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import UIKit
+import RefreshThemeProtocol
 
 let contentOffsetKeyPath = "contentOffset"
 let contentSizeKeyPath = "contentSize"
 var kvoContext = "PullToRefreshKVOContext"
-let refreshViewHeight: CGFloat = 80.0
 
 typealias AnimationCompleteCallback = (_ percentage: CGFloat) -> Void
 typealias RefreshCompletionCallback = (Void) -> Void
@@ -46,6 +46,9 @@ class RefreshView: UIView {
 			self.startAnimation()
 		}
 	}
+
+	var userTheme: AnyObject?
+	let defaultTheme = RefreshViewTheme()
 
 	var isDefinite = false
 	var state = PullToRefreshState.pulling {
@@ -93,12 +96,15 @@ class RefreshView: UIView {
 
 		self.refreshCompletion = refreshCompletion
 
-		var height: CGFloat = refreshViewHeight
-
 		if let themeProtocol = SJRefresh.shared.theme as? RefreshViewThemeProtocol {
-			if let viewHeight = themeProtocol.heightForRefreshView!() as? CGFloat {
-				height = viewHeight
-			}
+			userTheme = themeProtocol
+		}
+
+		var height: CGFloat = 0.0
+		if let viewHeight = userTheme?.heightForRefreshView?() {
+			height = viewHeight
+		} else {
+			height = defaultTheme.heightForRefreshView()
 		}
 
 		let refreshViewFrame = CGRect(x: 0,
@@ -144,14 +150,10 @@ class RefreshView: UIView {
 
 	func loadPullToRefreshArrowView() {
 
-		if let themeProtocol = SJRefresh.shared.theme as? RefreshViewThemeProtocol {
-			if let image = themeProtocol.pullImageForRefreshView?() {
-				arrow.image = image
-			}
-		}
-
-		if arrow.image == nil {
-			arrow.image = getDefaultPullImage()
+		if let image = userTheme?.pullImageForRefreshView?() {
+			arrow.image = image
+		} else {
+			arrow.image = defaultTheme.pullImageForRefreshView()
 		}
 
 		arrow.frame.size = (arrow.image?.size)!
@@ -175,11 +177,6 @@ class RefreshView: UIView {
 		animationView.animationDuration = 0.5
 		animationView.isHidden = true
 		addSubview(animationView)
-	}
-
-	func getDefaultPullImage() -> UIImage {
-
-		return UIImage(named: "Arrow", in: Bundle(for: type(of: self)), compatibleWith: nil)!
 	}
 
 	func animateImages(_ percentage: CGFloat) {
@@ -263,22 +260,29 @@ class RefreshView: UIView {
 	func getAnimationImages() -> [UIImage] {
 
 		var animationImages = [UIImage]()
-		if let themeProtocol = SJRefresh.shared.theme as? RefreshViewThemeProtocol {
-
-			animationImages = themeProtocol.imagesRefreshViewLoadingAnimation!()
+		if let images = userTheme?.imagesForRefreshViewLoadingAnimation?() {
+			animationImages = images
 		} else {
 
-			let bundle = Bundle(for: type(of: self))
-			guard let bundleURL = bundle.url(forResource: "loader_gear",
-			                                 withExtension: "gif") else {
-				print("This image does not exist")
-				return [UIImage]()
+			if let loaderGif = userTheme?.gifForRefreshViewLoadingAnimation?() {
+				animationImages = loadImagesFromGIf(loaderGif, bundle: Bundle.main)
+			} else {
+				let loaderGif = defaultTheme.gifForRefreshViewLoadingAnimation()
+				let bundle = Bundle(for: type(of: self))
+				animationImages =  loadImagesFromGIf(loaderGif, bundle: bundle)
 			}
-
-			animationImages =  UIImage.imagesFromGifURL(bundleURL)!
 		}
-
 		return animationImages
+	}
+
+	func loadImagesFromGIf(_ name: String, bundle: Bundle) -> [UIImage] {
+
+		guard let bundleURL = bundle.url(forResource: name,
+		                                 withExtension: "gif") else {
+											print("This image does not exist")
+											return [UIImage]()
+		}
+		return UIImage.imagesFromGifURL(bundleURL)!
 	}
 
 	func startAnimating() {

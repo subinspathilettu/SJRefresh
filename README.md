@@ -105,7 +105,7 @@ tableView.addRefreshView(definite: false,
 
 ## Customize Refresh View
 
-SJRefresh supports themes. So we can provide custom themes thats support RefreshViewThemeProtocol to SJRefresh
+SJRefresh supports themes. So we can provide custom themes thats support [RefreshThemeProtocol](https://code.qburst.com/subinsjose/RefreshThemeProtocol/blob/master/RefreshViewProtocol.swift) to SJRefresh
 
 ## Themes
 
@@ -114,7 +114,17 @@ SJRefresh supports themes. So we can provide custom themes thats support Refresh
 
 ## Contribute 
 
-If you want to contribute themes thats supports SJRefresh, please create as pod library and upload to cocoapods.
+If you want to contribute themes thats supports SJRefresh, please create as a pod library and use.
+
+```ruby
+spec.dependency 'RefreshThemeProtocol', '~> 1.0.0'
+```
+confirm your class with [RefreshThemeProtocol](https://code.qburst.com/subinsjose/RefreshThemeProtocol/blob/master/RefreshViewProtocol.swift)
+
+```swift
+extension <YOUR_CLASS>: RefreshViewThemeProtocol {
+}
+```
 
 ## Author
 

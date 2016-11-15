@@ -10,5 +10,6 @@ Pod::Spec.new do |spec|
   spec.social_media_url = 'https://twitter.com/subinsjose'
   spec.ios.deployment_target = '9.0'
   spec.source_files     = 'SJRefresh/Classes/**/*'
-  spec.resources		    = ['SJRefresh/Assets/**/*']
+  spec.resources		= ['SJRefresh/Assets/**/*']
+  spec.dependency 'RefreshThemeProtocol', '~> 1.0.0'
 end

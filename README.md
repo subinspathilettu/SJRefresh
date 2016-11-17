@@ -108,18 +108,37 @@ SJRefresh supports themes. So we can provide custom themes that supports [SJRefr
 ```swift
 SJRefresh.shared.setTheme(<CUSTOM_THEME>)
 ```
+### Create custom Themes
 
-## Contribute 
-
-You can create themes and contribute to world. 
-
-```ruby
-spec.dependency 'SJRefreshThemeProtocol', '1.0.1'
-```
-Confirm your class with [SJRefreshThemeProtocol](https://code.qburst.com/subinsjose/SJRefreshThemeProtocol/blob/master/SJRefreshThemeProtocol.swift)
+To create a theme, create a class that confirm [SJRefreshThemeProtocol](https://code.qburst.com/subinsjose/SJRefreshThemeProtocol/blob/master/SJRefreshThemeProtocol.swift) 
 
 ```swift
 extension <YOUR_CLASS>: SJRefreshThemeProtocol {
+
+	public func heightForRefreshView() -> CGFloat {
+	
+		return <CGFloat>
+	}
+
+	public func pullImageForRefreshView() -> UIImage {
+	
+		return <UIImage>
+	}
+
+	public func imagesForRefreshViewLoadingAnimation() -> [UIImage] {
+
+		return <[UIImage]>
+	}
+
+	public func backgroundColorForRefreshView() -> UIColor {
+
+		return <UIColor>
+	}
+
+	public func backgroundImageForRefreshView() -> UIImage? {
+		
+		return <UIImage>
+	}
 }
 ```
 

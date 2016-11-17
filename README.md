@@ -13,7 +13,6 @@ SJRefresh is a light weight generic pull to refresh written in Swift 3.
 
 - [x] Supports multiple themes
 - [x] Supports custom animation
-- [x] Supports gif
 
 ## Example
 
@@ -54,6 +53,7 @@ $ pod install
 
 ## Requirements
 
+- Xcode 8+
 - iOS 9.0+
 - Swift 3.0+
 
@@ -72,26 +72,13 @@ Here is how you can use SJRefresh.
 ```swift
 import SJRefresh
 ```
-* Set your theme in AppDelegate.swift
+* Specify your theme in AppDelegate.swift
 
 ```swift
-let theme = RefreshViewTheme()
-SJRefresh.shared.setTheme(theme)
+SJRefresh.shared.setTheme(SJTheme())
 ```
 
 * Add refresh view to your control,
-
-For definite refresh animation, add following code
-```swift
-tableView.addRefreshView(definite: true,
-		                 refreshCompletion: { (_) in
-
-	//Your code here
-	self.tableView.setRefreshPrecentage(60)
-	...
-	self.tableView.setRefreshPrecentage(100)
-})
-```
 
 For in definite refresh animation, add following code
 ```swift
@@ -102,27 +89,37 @@ tableView.addRefreshView(definite: false,
 	self.tableView.stopPullRefresh()
 })
 ```
+For definite refresh animation, add following code
 
+```swift
+tableView.addRefreshView(definite: true,
+		                 refreshCompletion: { (_) in
+
+	//Your code here
+	self.tableView.setRefreshPrecentage(60)
+	...
+	self.tableView.setRefreshPrecentage(100)
+})
+```
 ## Customize Refresh View
 
-SJRefresh supports themes. So we can provide custom themes thats support [RefreshThemeProtocol](https://code.qburst.com/subinsjose/RefreshThemeProtocol/blob/master/RefreshViewProtocol.swift) to SJRefresh
+SJRefresh supports themes. So we can provide custom themes that supports [SJRefreshThemeProtocol](https://code.qburst.com/subinsjose/SJRefreshThemeProtocol/blob/master/SJRefreshThemeProtocol.swift).
 
-## Themes
-
-* RefreshViewTheme
-* SJTheme
+```swift
+SJRefresh.shared.setTheme(<CUSTOM_THEME>)
+```
 
 ## Contribute 
 
-If you want to contribute themes thats supports SJRefresh, please create as a pod library and use.
+You can create themes and contribute to world. 
 
 ```ruby
-spec.dependency 'RefreshThemeProtocol', '~> 1.0.0'
+spec.dependency 'SJRefreshThemeProtocol', '1.0.1'
 ```
-confirm your class with [RefreshThemeProtocol](https://code.qburst.com/subinsjose/RefreshThemeProtocol/blob/master/RefreshViewProtocol.swift)
+Confirm your class with [SJRefreshThemeProtocol](https://code.qburst.com/subinsjose/SJRefreshThemeProtocol/blob/master/SJRefreshThemeProtocol.swift)
 
 ```swift
-extension <YOUR_CLASS>: RefreshViewThemeProtocol {
+extension <YOUR_CLASS>: SJRefreshThemeProtocol {
 }
 ```
 

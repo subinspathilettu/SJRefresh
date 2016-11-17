@@ -21,7 +21,8 @@
 //  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import UIKit
-import RefreshThemeProtocol
+import SJRefreshThemeProtocol
+import SJTheme
 
 let contentOffsetKeyPath = "contentOffset"
 let contentSizeKeyPath = "contentSize"
@@ -46,9 +47,6 @@ class RefreshView: UIView {
 			self.startAnimation()
 		}
 	}
-
-	var userTheme: AnyObject?
-	let defaultTheme = RefreshViewTheme()
 
 	var isDefinite = false
 	var state = PullToRefreshState.pulling {
@@ -96,15 +94,11 @@ class RefreshView: UIView {
 
 		self.refreshCompletion = refreshCompletion
 
-		if let themeProtocol = SJRefresh.shared.theme as? RefreshViewThemeProtocol {
-			userTheme = themeProtocol
-		}
+		precondition(SJRefresh.shared.theme != nil, "Provide a theme")
 
 		var height: CGFloat = 0.0
-		if let viewHeight = userTheme?.heightForRefreshView?() {
+		if let viewHeight = SJRefresh.shared.theme?.heightForRefreshView() {
 			height = viewHeight
-		} else {
-			height = defaultTheme.heightForRefreshView()
 		}
 
 		let refreshViewFrame = CGRect(x: 0,
@@ -150,33 +144,32 @@ class RefreshView: UIView {
 
 	func loadPullToRefreshArrowView() {
 
-		if let image = userTheme?.pullImageForRefreshView?() {
+		if let image = SJRefresh.shared.theme?.pullImageForRefreshView() {
 			arrow.image = image
-		} else {
-			arrow.image = defaultTheme.pullImageForRefreshView()
+			arrow.frame.size = (arrow.image?.size)!
+			arrow.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+			addSubview(arrow)
 		}
-
-		arrow.frame.size = (arrow.image?.size)!
-		arrow.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-		addSubview(arrow)
 	}
 
 	func loadAnimationView() {
 
-		let animationImages = getAnimationImages()
-		var animationframe = CGRect.zero
+		if let animationImages = SJRefresh.shared.theme?.imagesForRefreshViewLoadingAnimation() {
 
-		if !animationImages.isEmpty {
-			animationframe.size.width = animationImages[0].size.width
-			animationframe.size.height = animationImages[0].size.height
+			var animationframe = CGRect.zero
+
+			if !animationImages.isEmpty {
+				animationframe.size.width = animationImages[0].size.width
+				animationframe.size.height = animationImages[0].size.height
+			}
+
+			animationView = UIImageView(frame: animationframe)
+			animationView.animationImages = animationImages
+			animationView.contentMode = .scaleAspectFit
+			animationView.animationDuration = 0.5
+			animationView.isHidden = true
+			addSubview(animationView)
 		}
-
-		animationView = UIImageView(frame: animationframe)
-		animationView.animationImages = animationImages
-		animationView.contentMode = .scaleAspectFit
-		animationView.animationDuration = 0.5
-		animationView.isHidden = true
-		addSubview(animationView)
 	}
 
 	func animateImages(_ percentage: CGFloat) {
@@ -260,17 +253,8 @@ class RefreshView: UIView {
 	func getAnimationImages() -> [UIImage] {
 
 		var animationImages = [UIImage]()
-		if let images = userTheme?.imagesForRefreshViewLoadingAnimation?() {
+		if let images = SJRefresh.shared.theme?.imagesForRefreshViewLoadingAnimation() {
 			animationImages = images
-		} else {
-
-			if let loaderGif = userTheme?.gifForRefreshViewLoadingAnimation?() {
-				animationImages = loadImagesFromGIf(loaderGif, bundle: Bundle.main)
-			} else {
-				let loaderGif = defaultTheme.gifForRefreshViewLoadingAnimation()
-				let bundle = Bundle(for: type(of: self))
-				animationImages =  loadImagesFromGIf(loaderGif, bundle: bundle)
-			}
 		}
 		return animationImages
 	}

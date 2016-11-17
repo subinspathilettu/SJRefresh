@@ -21,12 +21,13 @@
 //  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import Foundation
+import SJRefreshThemeProtocol
 
 public class SJRefresh {
 
 	public static let shared = SJRefresh()
 
-	var theme: AnyObject?
+	var theme: SJRefreshThemeProtocol?
 	/**
 	* Method for set refresh theme.
 	*
@@ -34,6 +35,6 @@ public class SJRefresh {
 	*/
 	public func setTheme(_ theme: AnyObject) {
 
-		self.theme = theme
+		self.theme = theme as? SJRefreshThemeProtocol
 	}
 }

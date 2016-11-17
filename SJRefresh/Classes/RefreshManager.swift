@@ -31,7 +31,7 @@ public class SJRefresh {
 	/**
 	* Method for set refresh theme.
 	*
-	* - parameter theme: Theme for pull image and loading animation image.
+	* - parameter theme: Theme that supports SJRefreshThemeProtocol.
 	*/
 	public func setTheme(_ theme: AnyObject) {
 

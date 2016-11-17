@@ -107,7 +107,8 @@ class RefreshView: UIView {
 		                              height: height)
 
 		super.init(frame: refreshViewFrame)
-		self.frame = refreshViewFrame
+		frame = refreshViewFrame
+		backgroundColor = .red
 
 		setRefreshView()
 	}
@@ -119,7 +120,7 @@ class RefreshView: UIView {
 		                     y: self.frame.size.height / 2)
 		arrow.center = center
 		arrow.frame = arrow.frame.offsetBy(dx: 0, dy: 0)
-
+		arrow.backgroundColor = .clear
 		animationView.center = center
 	}
 
@@ -137,9 +138,22 @@ class RefreshView: UIView {
 
 	func setRefreshView() {
 
+		loadBackgroundImageView()
 		loadPullToRefreshArrowView()
 		loadAnimationView()
 		autoresizingMask = .flexibleWidth
+	}
+
+	func loadBackgroundImageView() {
+
+		let backgroundView = UIImageView(frame: self.bounds)
+		backgroundView.backgroundColor = SJRefresh.shared.theme?.backgroundColorForRefreshView()
+
+		if let image = SJRefresh.shared.theme?.backgroundImageForRefreshView() {
+			backgroundView.image = image
+		}
+		backgroundView.contentMode = .scaleAspectFill
+		addSubview(backgroundView)
 	}
 
 	func loadPullToRefreshArrowView() {
@@ -168,6 +182,7 @@ class RefreshView: UIView {
 			animationView.contentMode = .scaleAspectFit
 			animationView.animationDuration = 0.5
 			animationView.isHidden = true
+			animationView.backgroundColor = .clear
 			addSubview(animationView)
 		}
 	}
@@ -248,25 +263,6 @@ class RefreshView: UIView {
 		if upHeight > 0 {
 			return
 		}
-	}
-
-	func getAnimationImages() -> [UIImage] {
-
-		var animationImages = [UIImage]()
-		if let images = SJRefresh.shared.theme?.imagesForRefreshViewLoadingAnimation() {
-			animationImages = images
-		}
-		return animationImages
-	}
-
-	func loadImagesFromGIf(_ name: String, bundle: Bundle) -> [UIImage] {
-
-		guard let bundleURL = bundle.url(forResource: name,
-		                                 withExtension: "gif") else {
-											print("This image does not exist")
-											return [UIImage]()
-		}
-		return UIImage.imagesFromGifURL(bundleURL)!
 	}
 
 	func startAnimating() {

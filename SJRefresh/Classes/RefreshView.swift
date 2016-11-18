@@ -108,8 +108,6 @@ class RefreshView: UIView {
 
 		super.init(frame: refreshViewFrame)
 		frame = refreshViewFrame
-		backgroundColor = .red
-
 		setRefreshView()
 	}
 

@@ -47,7 +47,7 @@ extension RefreshView {
 		percentage = 0.0
 		animationView.isHidden = true
 		animationView.stopAnimating()
-		arrow.isHidden = false
+		pullImageView.isHidden = false
 		guard let scrollView = superview as? UIScrollView else {
 			return
 		}
@@ -55,22 +55,11 @@ extension RefreshView {
 		UIView.animate(withDuration: animationDuration,
 		               animations: {
 						scrollView.contentInset = self.scrollViewInsets
-						self.arrow.transform = CGAffineTransform.identity
+						self.pullImageView.transform = CGAffineTransform.identity
 		}, completion: { _ in
 			self.state = .pulling
 		}
 		)
-	}
-
-	func rotatePullImage(_ state: PullToRefreshState) {
-
-		UIView.animate(withDuration: 0.2, animations: {
-			var transform = CGAffineTransform.identity
-			if state == PullToRefreshState.triggered {
-				transform = CGAffineTransform(rotationAngle: CGFloat(M_PI))
-			}
-			self.arrow.transform = transform
-		})
 	}
 }
 

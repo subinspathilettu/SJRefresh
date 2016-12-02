@@ -2,11 +2,7 @@ PODS:
   - Alamofire (4.0.1)
   - AlamofireImage (3.1.0):
     - Alamofire (~> 4.0)
-  - SJRefresh (1.0.1):
-    - SJTheme (~> 1.0.0)
-  - SJRefreshThemeProtocol (1.0.3)
-  - SJTheme (1.0.4):
-    - SJRefreshThemeProtocol (~> 1.0.3)
+  - SJRefresh (1.0.1)
 
 DEPENDENCIES:
   - Alamofire (= 4.0.1)
@@ -20,9 +16,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
   AlamofireImage: bb8c8351c51cb1633bb6be69b6dbbaff37ce65b7
-  SJRefresh: 35fb23c42e736f56b7d2f634e49925e7f9ffff59
-  SJRefreshThemeProtocol: 784cf368433a30734d216194f275439c46292cea
-  SJTheme: a1389425821dbd1d640daeec0b8bf78c6bd39e51
+  SJRefresh: 1989759d140092080022b8a490d10359f121e1a3
 
 PODFILE CHECKSUM: 3d68699d3d44a3ff9713d44f4ea030a821903292
 

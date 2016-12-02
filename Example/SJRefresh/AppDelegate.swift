@@ -8,7 +8,6 @@
 
 import UIKit
 import SJRefresh
-import SJTheme
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

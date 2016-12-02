@@ -11,5 +11,6 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target = '9.0'
   spec.source_files     = 'SJRefresh/Classes/**/*'
   spec.resources		= ['SJRefresh/Assets/**/*']
-  spec.dependency 'SJTheme', '~> 1.0.0'
+#spec.dependency 'SJTheme'
+  spec.dependency 'PullToBounce'
 end

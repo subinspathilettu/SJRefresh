@@ -21,8 +21,6 @@
 //  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import UIKit
-import SJRefreshThemeProtocol
-import SJTheme
 
 let contentOffsetKeyPath = "contentOffset"
 let contentSizeKeyPath = "contentSize"
@@ -36,7 +34,7 @@ class RefreshView: UIView {
 	// MARK: Variables
 	var refreshCompletion: RefreshCompletionCallback?
 	var animationCompletion: AnimationCompleteCallback?
-	var arrow = UIImageView()
+	var pullImageView = UIImageView()
 	var animationView = UIImageView()
 	var animationPercentage: CGFloat = 0.0
 	let animationDuration: Double = 0.5
@@ -49,7 +47,7 @@ class RefreshView: UIView {
 	}
 
 	var isDefinite = false
-	var state = PullToRefreshState.pulling {
+	var state = SJRefreshState.pulling {
 		didSet {
 
 			if self.state == oldValue || animationView.animationImages?.count == 0 {
@@ -74,8 +72,7 @@ class RefreshView: UIView {
 				}
 			case .refreshing:
 				startAnimating()
-			case .pulling, .triggered:
-				rotatePullImage(state)
+			case .pulling, .triggered: break
 			}
 		}
 	}
@@ -87,7 +84,8 @@ class RefreshView: UIView {
 	}
 
 	required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
+		
+		super.init(coder: aDecoder)
 	}
 
 	init(refreshCompletion: RefreshCompletionCallback?) {
@@ -116,9 +114,9 @@ class RefreshView: UIView {
 		super.layoutSubviews()
 		let center = CGPoint(x: UIScreen.main.bounds.size.width / 2,
 		                     y: self.frame.size.height / 2)
-		arrow.center = center
-		arrow.frame = arrow.frame.offsetBy(dx: 0, dy: 0)
-		arrow.backgroundColor = .clear
+		pullImageView.center = center
+		pullImageView.frame = pullImageView.frame.offsetBy(dx: 0, dy: 0)
+		pullImageView.backgroundColor = .clear
 		animationView.center = center
 	}
 
@@ -156,12 +154,8 @@ class RefreshView: UIView {
 
 	func loadPullToRefreshArrowView() {
 
-		if let image = SJRefresh.shared.theme?.pullImageForRefreshView() {
-			arrow.image = image
-			arrow.frame.size = (arrow.image?.size)!
-			arrow.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-			addSubview(arrow)
-		}
+		pullImageView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
+		addSubview(pullImageView)
 	}
 
 	func loadAnimationView() {
@@ -242,6 +236,7 @@ class RefreshView: UIView {
 		// Pulling State Check
 		let offsetY = scrollView.contentOffset.y
 		if offsetY <= 0 {
+
 			if offsetY < -self.frame.size.height {
 				// pulling or refreshing
 				if scrollView.isDragging == false && self.state != .refreshing { //release the finger
@@ -253,6 +248,13 @@ class RefreshView: UIView {
 				//starting point, start from pulling
 				self.state = .pulling
 			}
+
+			if let pullImage = SJRefresh.shared.theme?.pullImageForRefreshView(state: state,
+			                                                                   pullPercentage: 0.0) {
+				pullImageView.image = pullImage
+				pullImageView.frame.size = pullImage.size
+			}
+
 			return //return for pull down
 		}
 
@@ -268,7 +270,7 @@ class RefreshView: UIView {
 		animationView.isHidden = false
 		startAnimation(nil)
 
-		arrow.isHidden = true
+		pullImageView.isHidden = true
 		guard let scrollView = superview as? UIScrollView else {
 			return
 		}

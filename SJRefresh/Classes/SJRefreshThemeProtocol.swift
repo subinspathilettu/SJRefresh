@@ -1,8 +1,7 @@
 //
-//  Enums.swift
-//  Pods
+//  SJRefreshThemeProtocol.swift
 //
-//  Created by Subins Jose on 25/10/16.
+//  Created by Subins Jose on 16/11/16.
 //  Copyright © 2016 Subins Jose. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -22,11 +21,25 @@
 
 import Foundation
 
-enum PullToRefreshState {
+public enum SJRefreshState {
 
 	case pulling
 	case triggered
 	case refreshing
 	case stop
 	case finish
+}
+
+public protocol SJRefreshThemeProtocol {
+
+	func heightForRefreshView() -> CGFloat
+
+	func pullImageForRefreshView(state: SJRefreshState,
+	                             pullPercentage percentage: CGFloat) -> UIImage?
+
+	func imagesForRefreshViewLoadingAnimation() -> [UIImage]
+
+	func backgroundColorForRefreshView() -> UIColor
+
+	func backgroundImageForRefreshView() -> UIImage?
 }

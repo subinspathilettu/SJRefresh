@@ -58,8 +58,7 @@ extension RefreshView {
 						self.pullImageView.transform = CGAffineTransform.identity
 		}, completion: { _ in
 			self.state = .pulling
-		}
-		)
+		})
 	}
 }
 

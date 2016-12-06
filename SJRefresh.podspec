@@ -12,5 +12,4 @@ Pod::Spec.new do |spec|
   spec.source_files     = 'SJRefresh/Classes/**/*'
   spec.resources		= ['SJRefresh/Assets/**/*']
 #spec.dependency 'SJTheme'
-  spec.dependency 'PullToBounce'
 end

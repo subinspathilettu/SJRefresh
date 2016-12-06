@@ -46,6 +46,7 @@ public extension UIScrollView {
 		refreshView.tag = RefreshConst.pullTag
 		refreshView.isDefinite = definite
 		addSubview(refreshView)
+		refreshView.addPullWave()
 	}
 
 	/**

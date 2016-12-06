@@ -77,6 +77,8 @@ class RefreshView: UIView {
 		}
 	}
 
+	var waveLayer: CAShapeLayer?
+
 	// MARK: UIView
 	override convenience init(frame: CGRect) {
 
@@ -107,6 +109,32 @@ class RefreshView: UIView {
 		super.init(frame: refreshViewFrame)
 		frame = refreshViewFrame
 		setRefreshView()
+	}
+
+	func addPullWave() {
+
+		backgroundColor = superview?.backgroundColor
+		waveLayer = CAShapeLayer(layer: self.layer)
+		waveLayer?.lineWidth = 1
+		waveLayer?.path = wavePath(amountX: 0.0, amountY: 0.0)
+		waveLayer?.strokeColor = backgroundColor?.cgColor
+		waveLayer?.fillColor = backgroundColor?.cgColor
+		superview?.layer.addSublayer(waveLayer!)
+	}
+
+	func wavePath(amountX:CGFloat, amountY:CGFloat) -> CGPath {
+
+		let w = self.frame.width
+		let centerY:CGFloat = 0
+
+		let topLeftPoint = CGPoint(x: 0, y: centerY)
+		let topMidPoint = CGPoint(x: w / 2 + amountX, y: centerY + amountY)
+		let topRightPoint = CGPoint(x: w, y: centerY)
+
+		let bezierPath = UIBezierPath()
+		bezierPath.move(to: topLeftPoint)
+		bezierPath.addQuadCurve(to: topRightPoint, controlPoint: topMidPoint)
+		return bezierPath.cgPath
 	}
 
 	override func layoutSubviews() {
@@ -237,6 +265,10 @@ class RefreshView: UIView {
 		let offsetY = scrollView.contentOffset.y
 		if offsetY <= 0 {
 
+			if abs(offsetY) < 80.0 {
+				waveLayer?.path = wavePath(amountX: 0, amountY: abs(offsetY))
+			}
+
 			if offsetY < -self.frame.size.height {
 				// pulling or refreshing
 				if scrollView.isDragging == false && self.state != .refreshing { //release the finger
@@ -267,6 +299,7 @@ class RefreshView: UIView {
 
 	func startAnimating() {
 
+		boundAnimation()
 		animationView.isHidden = false
 		startAnimation(nil)
 
@@ -277,7 +310,7 @@ class RefreshView: UIView {
 		scrollViewBounces = scrollView.bounces
 		scrollViewInsets = scrollView.contentInset
 		var insets = scrollView.contentInset
-		insets.top += self.frame.size.height
+		insets.top += frame.size.height
 
 		scrollView.bounces = false
 		UIView.animate(withDuration: animationDuration, delay: 0,
@@ -288,6 +321,32 @@ class RefreshView: UIView {
 
 						self.refreshCompletion?()
 		})
+	}
+
+	func boundAnimation() {
+
+		waveLayer?.path = wavePath(amountX: 0, amountY: 0)
+		let bounce = CAKeyframeAnimation(keyPath: "path")
+		bounce.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+		let values = [
+			self.wavePath(amountX: 0.0, amountY: 30),
+			self.wavePath(amountX: 0.0, amountY: 20),
+			self.wavePath(amountX: 0.0, amountY: 10),
+			self.wavePath(amountX: 0.0, amountY: 0.0),
+			self.wavePath(amountX: 0.0, amountY: -30),
+			self.wavePath(amountX: 0.0, amountY: 25),
+			self.wavePath(amountX: 0.0, amountY: -20),
+			self.wavePath(amountX: 0.0, amountY: 15),
+			self.wavePath(amountX: 0.0, amountY: -10),
+			self.wavePath(amountX: 0.0, amountY: 5),
+			self.wavePath(amountX: 0.0, amountY: 0.0)
+		]
+		bounce.values = values
+		bounce.duration = 1.0
+		bounce.isRemovedOnCompletion = true
+		bounce.fillMode = kCAFillModeForwards
+		bounce.delegate = self
+		waveLayer?.add(bounce, forKey: "return")
 	}
 
 	func getAnimationStartIndex(_ completedPercentage: CGFloat) -> Int {

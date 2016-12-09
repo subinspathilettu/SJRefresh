@@ -8,56 +8,33 @@
 
 import UIKit
 import SJRefresh
-import Alamofire
-import AlamofireImage
 
 class ViewController: UIViewController {
 
 	@IBOutlet weak var tableView: UITableView!
-	var items = [AnyObject]()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		tableView.addRefreshView(definite: false,
-		                         refreshCompletion: { (_) in
-			Alamofire.request("https://www.googleapis.com/books/v1/volumes?q=crime")
-				.responseJSON { response in
-					if let JSON = response.result.value as? [String : AnyObject] {
-						self.items = JSON["items"] as! [AnyObject]
-					}
-
-					self.tableView.reloadData()
-					self.tableView.stopPullRefresh()
-			}
+		tableView.addRefreshView({ (_) in
+			self.perform(#selector(self.stop), with: nil, afterDelay: 3.0)
 		})
+	}
+
+	func stop() {
+		tableView.stopRefreshAnimation()
 	}
 }
 
 extension ViewController: UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-		return items.count
+		return 10
 	}
 
-	func tableView(_ tableView: UITableView, cellForRowAt
-		indexPath: IndexPath) -> UITableViewCell {
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
 		let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier")
-
-		let item = items[indexPath.row] as? [String : AnyObject]
-		let volumInfo = item?["volumeInfo"] as? [String : AnyObject]
-		let imageLinks = volumInfo?["imageLinks"] as? [String : String]
-		let thumbNailImage = imageLinks?["thumbnail"]
-
-		cell?.textLabel?.text = volumInfo?["title"] as? String
-		cell?.detailTextLabel?.text = volumInfo?["description"] as? String
-		cell?.imageView?.af_setImage(withURL: URL.init(string: thumbNailImage!)!,
-		                             placeholderImage: nil,
-		                             completion: { (image) in
-		})
-
 		return cell!
 	}
 }

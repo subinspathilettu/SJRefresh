@@ -39,48 +39,12 @@ public extension UIScrollView {
 	*
 	* - parameter refreshCompletion: Refresh start callback.
 	*/
-	public func addRefreshView(definite: Bool,
-	                           refreshCompletion: ((Void) -> Void)?) {
+	public func addRefreshView(_ refreshCompletion: ((Void) -> Void)?) {
 
 		let refreshView = RefreshView(refreshCompletion: refreshCompletion)
 		refreshView.tag = RefreshConst.pullTag
-		refreshView.isDefinite = definite
 		addSubview(refreshView)
 		refreshView.addPullWave()
-	}
-
-	/**
-	* Method for start refreshview animations.
-	*/
-	public func startPullRefresh() {
-
-		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
-		refreshView?.state = .refreshing
-	}
-
-	/**
-	* Method for stop refreshview animations.
-	*/
-	public func stopPullRefresh() {
-
-		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
-		refreshView?.state = .stop
-	}
-
-	/**
-	* Method for set refresh percentage.
-	*/
-	public func setRefreshPrecentage(_ percentage: CGFloat) {
-
-		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
-
-		if refreshView?.isDefinite == true {
-			refreshView?.percentage = percentage
-		} else {
-
-			print("Invalid function call. \"setRefreshPrecentage\" "
-				+ "is not required for definite refresh.")
-		}
 	}
 
 	/**
@@ -92,7 +56,24 @@ public extension UIScrollView {
 		refreshView?.removeFromSuperview()
 	}
 
-	private func refreshViewWithTag(_ tag: Int) -> RefreshView? {
+	/**
+	* Method for stop refresh animation.
+	*/
+	public func stopRefreshAnimation() {
+
+		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
+		refreshView?.ballView?.endAnimation() { _ in
+			refreshView?.ballView?.isHidden = true
+			let yPos = -((refreshView?.frame.height)! - (refreshView?.bendDistance)!)
+			self.setContentOffset(CGPoint(x: 0, y: yPos), animated: false)
+			self.setContentOffset(CGPoint.zero, animated: true)
+			self.isScrollEnabled = true
+		}
+
+	}
+
+	fileprivate func refreshViewWithTag(_ tag: Int) -> RefreshView? {
+
 		let pullToRefreshView = viewWithTag(tag)
 		return pullToRefreshView as? RefreshView
 	}

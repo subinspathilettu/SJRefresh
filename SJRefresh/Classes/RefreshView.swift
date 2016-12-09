@@ -23,7 +23,6 @@
 import UIKit
 
 let contentOffsetKeyPath = "contentOffset"
-let contentSizeKeyPath = "contentSize"
 var kvoContext = "PullToRefreshKVOContext"
 
 typealias AnimationCompleteCallback = (_ percentage: CGFloat) -> Void
@@ -33,51 +32,9 @@ class RefreshView: UIView {
 
 	// MARK: Variables
 	var refreshCompletion: RefreshCompletionCallback?
-	var animationCompletion: AnimationCompleteCallback?
-	var pullImageView = UIImageView()
-	var animationView = UIImageView()
-	var animationPercentage: CGFloat = 0.0
-	let animationDuration: Double = 0.5
-	var scrollViewBounces = false
-	var scrollViewInsets = UIEdgeInsets.zero
-	var percentage: CGFloat = 0.0 {
-		didSet {
-			self.startAnimation()
-		}
-	}
-
-	var isDefinite = false
-	var state = SJRefreshState.pulling {
-		didSet {
-
-			if self.state == oldValue || animationView.animationImages?.count == 0 {
-				return
-			}
-			switch self.state {
-			case .stop:
-				stopAnimating()
-			case .finish:
-				var time = DispatchTime.now() +
-					Double(Int64(animationDuration *
-						Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-				DispatchQueue.main.asyncAfter(deadline: time) {
-					self.stopAnimating()
-				}
-
-				time = DispatchTime.now() +
-					Double(Int64((animationDuration * 2) *
-						Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-				DispatchQueue.main.asyncAfter(deadline: time) {
-					self.removeFromSuperview()
-				}
-			case .refreshing:
-				startAnimating()
-			case .pulling, .triggered: break
-			}
-		}
-	}
-
+	let bendDistance: CGFloat = 50.0
 	var waveLayer: CAShapeLayer?
+	var ballView: BallView?
 
 	// MARK: UIView
 	override convenience init(frame: CGRect) {
@@ -93,14 +50,7 @@ class RefreshView: UIView {
 	init(refreshCompletion: RefreshCompletionCallback?) {
 
 		self.refreshCompletion = refreshCompletion
-
-		precondition(SJRefresh.shared.theme != nil, "Provide a theme")
-
-		var height: CGFloat = 0.0
-		if let viewHeight = SJRefresh.shared.theme?.heightForRefreshView() {
-			height = viewHeight
-		}
-
+		let height: CGFloat = 120.0
 		let refreshViewFrame = CGRect(x: 0,
 		                              y: -height,
 		                              width: UIScreen.main.bounds.width,
@@ -108,21 +58,34 @@ class RefreshView: UIView {
 
 		super.init(frame: refreshViewFrame)
 		frame = refreshViewFrame
-		setRefreshView()
+
+		let ballViewHeight: CGFloat = 56
+		ballView = BallView(
+			frame: CGRect(x: 0, y: 50, width: frame.width, height: ballViewHeight),
+			circleSize: 28,
+			timingFunc: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut),
+			moveUpDuration: 0.2,
+			moveUpDist: 53,
+			color: UIColor.white)
+		addSubview(ballView!)
+		ballView?.isHidden = true
 	}
 
 	func addPullWave() {
 
-		backgroundColor = superview?.backgroundColor
+		backgroundColor = UIColor(red: 0.38,
+		                          green: 0.64,
+		                          blue: 0.95,
+		                          alpha: 1)
 		waveLayer = CAShapeLayer(layer: self.layer)
 		waveLayer?.lineWidth = 1
-		waveLayer?.path = wavePath(amountX: 0.0, amountY: 0.0)
+		waveLayer?.path = wavePath(0.0, amountY: 0.0)
 		waveLayer?.strokeColor = backgroundColor?.cgColor
 		waveLayer?.fillColor = backgroundColor?.cgColor
 		superview?.layer.addSublayer(waveLayer!)
 	}
 
-	func wavePath(amountX:CGFloat, amountY:CGFloat) -> CGPath {
+	func wavePath(_ amountX:CGFloat, amountY:CGFloat) -> CGPath {
 
 		let w = self.frame.width
 		let centerY:CGFloat = 0
@@ -137,17 +100,6 @@ class RefreshView: UIView {
 		return bezierPath.cgPath
 	}
 
-	override func layoutSubviews() {
-
-		super.layoutSubviews()
-		let center = CGPoint(x: UIScreen.main.bounds.size.width / 2,
-		                     y: self.frame.size.height / 2)
-		pullImageView.center = center
-		pullImageView.frame = pullImageView.frame.offsetBy(dx: 0, dy: 0)
-		pullImageView.backgroundColor = .clear
-		animationView.center = center
-	}
-
 	override func willMove(toSuperview superView: UIView!) {
 
 		self.removeRegister()
@@ -158,81 +110,6 @@ class RefreshView: UIView {
 		                       forKeyPath: contentOffsetKeyPath,
 		                       options: .initial,
 		                       context: &kvoContext)
-	}
-
-	func setRefreshView() {
-
-		loadBackgroundImageView()
-		loadPullToRefreshArrowView()
-		loadAnimationView()
-		autoresizingMask = .flexibleWidth
-	}
-
-	func loadBackgroundImageView() {
-
-		let backgroundView = UIImageView(frame: self.bounds)
-		backgroundView.backgroundColor = SJRefresh.shared.theme?.backgroundColorForRefreshView()
-
-		if let image = SJRefresh.shared.theme?.backgroundImageForRefreshView() {
-			backgroundView.image = image
-		}
-		backgroundView.contentMode = .scaleAspectFill
-		addSubview(backgroundView)
-	}
-
-	func loadPullToRefreshArrowView() {
-
-		pullImageView.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-		addSubview(pullImageView)
-	}
-
-	func loadAnimationView() {
-
-		if let animationImages = SJRefresh.shared.theme?.imagesForRefreshViewLoadingAnimation() {
-
-			var animationframe = CGRect.zero
-
-			if !animationImages.isEmpty {
-				animationframe.size.width = animationImages[0].size.width
-				animationframe.size.height = animationImages[0].size.height
-			}
-
-			animationView = UIImageView(frame: animationframe)
-			animationView.animationImages = animationImages
-			animationView.contentMode = .scaleAspectFit
-			animationView.animationDuration = 0.5
-			animationView.isHidden = true
-			animationView.backgroundColor = .clear
-			addSubview(animationView)
-		}
-	}
-
-	func animateImages(_ percentage: CGFloat) {
-
-		if percentage != 0 && percentage > animationPercentage {
-			startAnimation({ (percentage) in
-				self.animationPercentage = percentage
-				if percentage >= 100 {
-					self.stopAnimating()
-				} else {
-					self.startAnimation()
-				}
-			})
-		}
-	}
-
-	func startAnimation() {
-
-		if animationPercentage < percentage && percentage != 0 {
-			startAnimation({ (percent) in
-				self.animationPercentage = percent
-				if percent >= 100 {
-					self.stopAnimating()
-				} else {
-					self.startAnimation()
-				}
-			})
-		}
 	}
 
 	func removeRegister() {
@@ -247,6 +124,41 @@ class RefreshView: UIView {
 		self.removeRegister()
 	}
 
+	func boundAnimation(positionX: CGFloat,positionY: CGFloat) {
+
+		waveLayer?.path = wavePath(0, amountY: 0)
+		let bounce = CAKeyframeAnimation(keyPath: "path")
+		bounce.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
+		let values = [
+			self.wavePath(positionX, amountY: positionY),
+			self.wavePath(-(positionX * 0.7), amountY: -(positionY * 0.7)),
+			self.wavePath(positionX * 0.6, amountY: positionY * 0.6),
+			self.wavePath(-(positionX * 0.5), amountY: -(positionY * 0.5)),
+			self.wavePath(positionX * 0.4, amountY: positionY * 0.4),
+			self.wavePath(-(positionX * 0.3), amountY: -(positionY * 0.3)),
+			self.wavePath(positionX * 0.15, amountY: positionY * 0.15),
+			self.wavePath(0.0, amountY: 0.0)
+		]
+		bounce.values = values
+		bounce.duration = 0.4
+		bounce.isRemovedOnCompletion = true
+		bounce.fillMode = kCAFillModeForwards
+		waveLayer?.add(bounce, forKey: "return")
+
+		
+		Timer.scheduledTimer(timeInterval: 0.2, target: self,
+		                     selector: #selector(self.ballAnimation),
+		                     userInfo: nil,
+		                     repeats: false)
+		refreshCompletion?()
+	}
+
+	func ballAnimation() {
+
+		ballView?.isHidden = false
+		ballView?.startAnimation()
+	}
+
 	// MARK: KVO
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?,
 	                           change: [NSKeyValueChangeKey : Any]?,
@@ -257,127 +169,29 @@ class RefreshView: UIView {
 		}
 
 		if !(context == &kvoContext && keyPath == contentOffsetKeyPath) {
+			
 			super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
 			return
 		}
 
-		// Pulling State Check
-		let offsetY = scrollView.contentOffset.y
-		if offsetY <= 0 {
+		if scrollView.contentOffset.y < 0 {
 
-			if abs(offsetY) < 80.0 {
-				waveLayer?.path = wavePath(amountX: 0, amountY: abs(offsetY))
-			}
+			let pullDistance = (frame.size.height - bendDistance)
+			let offsetY = abs(scrollView.contentOffset.y)
 
-			if offsetY < -self.frame.size.height {
-				// pulling or refreshing
-				if scrollView.isDragging == false && self.state != .refreshing { //release the finger
-					self.state = .refreshing //startAnimating
-				} else if self.state != .refreshing { //reach the threshold
-					self.state = .triggered
+			if offsetY > pullDistance {
+				waveLayer?.path = wavePath(0, amountY: (offsetY - pullDistance))
+
+				if offsetY > frame.size.height {
+					scrollView.isScrollEnabled = false
+					scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x,
+					                                    y: -frame.size.height),
+					                            animated: false)
+					boundAnimation(positionX: 0, positionY: bendDistance)
 				}
-			} else if self.state == .triggered {
-				//starting point, start from pulling
-				self.state = .pulling
+			} else {
+				waveLayer?.path = wavePath(0, amountY: 0)
 			}
-
-			if let pullImage = SJRefresh.shared.theme?.pullImageForRefreshView(state: state,
-			                                                                   pullPercentage: 0.0) {
-				pullImageView.image = pullImage
-				pullImageView.frame.size = pullImage.size
-			}
-
-			return //return for pull down
 		}
-
-		//push up
-		let upHeight = offsetY + scrollView.frame.size.height - scrollView.contentSize.height
-		if upHeight > 0 {
-			return
-		}
-	}
-
-	func startAnimating() {
-
-		boundAnimation()
-		animationView.isHidden = false
-		startAnimation(nil)
-
-		pullImageView.isHidden = true
-		guard let scrollView = superview as? UIScrollView else {
-			return
-		}
-		scrollViewBounces = scrollView.bounces
-		scrollViewInsets = scrollView.contentInset
-		var insets = scrollView.contentInset
-		insets.top += frame.size.height
-
-		scrollView.bounces = false
-		UIView.animate(withDuration: animationDuration, delay: 0,
-		               options:[], animations: {
-						scrollView.contentInset = insets
-		},
-		               completion: { _ in
-
-						self.refreshCompletion?()
-		})
-	}
-
-	func boundAnimation() {
-
-		waveLayer?.path = wavePath(amountX: 0, amountY: 0)
-		let bounce = CAKeyframeAnimation(keyPath: "path")
-		bounce.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
-		let values = [
-			self.wavePath(amountX: 0.0, amountY: 30),
-			self.wavePath(amountX: 0.0, amountY: 20),
-			self.wavePath(amountX: 0.0, amountY: 10),
-			self.wavePath(amountX: 0.0, amountY: 0.0),
-			self.wavePath(amountX: 0.0, amountY: -30),
-			self.wavePath(amountX: 0.0, amountY: 25),
-			self.wavePath(amountX: 0.0, amountY: -20),
-			self.wavePath(amountX: 0.0, amountY: 15),
-			self.wavePath(amountX: 0.0, amountY: -10),
-			self.wavePath(amountX: 0.0, amountY: 5),
-			self.wavePath(amountX: 0.0, amountY: 0.0)
-		]
-		bounce.values = values
-		bounce.duration = 1.0
-		bounce.isRemovedOnCompletion = true
-		bounce.fillMode = kCAFillModeForwards
-		bounce.delegate = self
-		waveLayer?.add(bounce, forKey: "return")
-	}
-
-	func getAnimationStartIndex(_ completedPercentage: CGFloat) -> Int {
-
-		var percentage = completedPercentage
-		if percentage > self.percentage {
-			percentage = self.percentage
-		}
-		let count = animationView.animationImages?.count
-		let index = isDefinite ? Int(CGFloat(count!) * (percentage / 100.0)) : 0
-		return Int(index)
-	}
-
-	func getAnimationEndIndex(_ percentage: CGFloat) -> Int {
-
-		let count = animationView.animationImages?.count
-		let index = isDefinite ? Int(CGFloat(count!) * (percentage / 100.0)) : count!
-		return Int(index)
-	}
-
-	func getAnimationImages(_ percentage: CGFloat) -> [CGImage] {
-
-		var images = [CGImage]()
-		let startIndex = getAnimationStartIndex(animationPercentage)
-		let endIndex = getAnimationEndIndex(percentage)
-
-		for index in startIndex..<endIndex {
-			let image = animationView.animationImages?[index]
-			images.append((image?.cgImage!)!)
-		}
-		
-		return images
 	}
 }

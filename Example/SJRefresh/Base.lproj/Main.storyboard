@@ -55,7 +55,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R9A-QK-yWe">
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R9A-QK-yWe" userLabel="Box View">
                                                     <rect key="frame" x="15" y="15" width="80" height="70"/>
                                                     <color key="backgroundColor" red="0.71764705880000002" green="0.81568627449999997" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
@@ -67,7 +67,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
-                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8EM-jg-oBA">
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8EM-jg-oBA" userLabel="Top Line View">
                                                     <rect key="frame" x="105" y="22" width="250" height="6"/>
                                                     <color key="backgroundColor" red="0.71764705880000002" green="0.81568627449999997" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
@@ -79,7 +79,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
-                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DfJ-2j-DoC">
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DfJ-2j-DoC" userLabel="Middle Line View">
                                                     <rect key="frame" x="105" y="47" width="100" height="6"/>
                                                     <color key="backgroundColor" red="0.71764705880000002" green="0.81568627449999997" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
@@ -91,7 +91,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </view>
-                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7lh-PQ-V6b">
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7lh-PQ-V6b" userLabel="Bottom Line View">
                                                     <rect key="frame" x="105" y="72" width="250" height="6"/>
                                                     <color key="backgroundColor" red="0.71764705880000002" green="0.81568627449999997" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>

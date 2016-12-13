@@ -17,7 +17,7 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 
 		tableView.addRefreshView({ (_) in
-			self.perform(#selector(self.stop), with: nil, afterDelay: 3.0)
+			self.perform(#selector(self.stop), with: nil, afterDelay: 5.0)
 		})
 	}
 

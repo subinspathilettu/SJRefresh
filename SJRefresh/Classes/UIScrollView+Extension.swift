@@ -69,7 +69,6 @@ public extension UIScrollView {
 			self.setContentOffset(CGPoint.zero, animated: true)
 			self.isScrollEnabled = true
 		}
-
 	}
 
 	fileprivate func refreshViewWithTag(_ tag: Int) -> RefreshView? {

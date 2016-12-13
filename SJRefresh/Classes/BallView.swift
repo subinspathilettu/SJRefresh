@@ -3,40 +3,48 @@
 //  BezierPathAnimation
 //
 //  Created by Takuya Okamoto on 2015/08/11.
-//  Copyright (c) 2015年 Uniface. All rights reserved.
+//  Upadated by Subins Jose on 05/10/16.
+//  Copyright © 2016 Subins Jose. All rights reserved.
 //
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+//    and associated documentation files (the "Software"), to deal in the Software without
+//	  restriction, including without limitation the rights to use, copy, modify, merge, publish,
+//    distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom
+//	  the Software is furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all copies or
+//    substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+//  BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+//  AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+//  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import UIKit
 
 private var timeFunc: CAMediaTimingFunction!
-private var upDuration: Double!
 
 class BallView: UIView {
     
     var circleLayer: CircleLayer!
+	let circleSize: CGFloat = 30.0
     
-    init(frame:CGRect,
-        circleSize:CGFloat = 40,
-        timingFunc:CAMediaTimingFunction = timeFunc,
-        moveUpDuration:CFTimeInterval = upDuration,
-        moveUpDist:CGFloat,
-        color:UIColor = UIColor.white) {
+    override init(frame:CGRect) {
 
-        timeFunc = timingFunc
-        upDuration = moveUpDuration
         super.init(frame:frame)
 
-
         let circleMoveView = UIView()
-        circleMoveView.frame = CGRect(x: 0, y: 0, width: moveUpDist, height: moveUpDist)
+        circleMoveView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         circleMoveView.center = CGPoint(x: frame.width/2, y: frame.height + circleSize / 2)
         addSubview(circleMoveView)
         
         circleLayer = CircleLayer(
             size: circleSize,
-            moveUpDist: moveUpDist,
+            moveUpDist: 50,
             superViewFrame: circleMoveView.frame,
-            color: color
+            color: UIColor.white
+
         )
         circleMoveView.layer.addSublayer(circleLayer)
     }
@@ -102,7 +110,7 @@ class CircleLayer: CAShapeLayer {
     func startAnimation() {
 
         self.moveUp(moveUpDist)
-		Timer.scheduledTimer(timeInterval: upDuration, target: self,
+		Timer.scheduledTimer(timeInterval: 0.2, target: self,
 		                     selector: #selector(self.spinnerAnimation),
 		                     userInfo: nil,
 		                     repeats: false)
@@ -125,8 +133,8 @@ class CircleLayer: CAShapeLayer {
         
         move.fromValue = NSValue(cgPoint: position)
         move.toValue = NSValue(cgPoint: CGPoint(x: position.x, y: position.y - distance))
-        move.duration = upDuration
-        move.timingFunction = timeFunc
+        move.duration = 0.2
+        move.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
         move.fillMode = kCAFillModeForwards
         move.isRemovedOnCompletion = false
         add(move, forKey: move.keyPath)
@@ -138,8 +146,8 @@ class CircleLayer: CAShapeLayer {
         let move = CABasicAnimation(keyPath: "position")
         move.fromValue = NSValue(cgPoint: CGPoint(x: position.x, y: position.y - distance))
         move.toValue = NSValue(cgPoint: position)
-		move.duration = upDuration
-        move.timingFunction = timeFunc
+		move.duration = 0.2
+        move.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
         move.fillMode = kCAFillModeForwards
         move.isRemovedOnCompletion = false
         move.delegate = self

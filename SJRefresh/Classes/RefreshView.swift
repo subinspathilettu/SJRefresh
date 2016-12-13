@@ -25,7 +25,6 @@ import UIKit
 let contentOffsetKeyPath = "contentOffset"
 var kvoContext = "PullToRefreshKVOContext"
 
-typealias AnimationCompleteCallback = (_ percentage: CGFloat) -> Void
 typealias RefreshCompletionCallback = (Void) -> Void
 
 class RefreshView: UIView {
@@ -33,24 +32,27 @@ class RefreshView: UIView {
 	// MARK: Variables
 	var refreshCompletion: RefreshCompletionCallback?
 	let bendDistance: CGFloat = 50.0
+	let height: CGFloat = 120.0
+	let ballViewHeight: CGFloat = 50
+	let viewColor = UIColor(red: 0.38,
+	                        green: 0.64,
+	                        blue: 0.95,
+	                        alpha: 1)// light blue
 	var waveLayer: CAShapeLayer?
 	var ballView: BallView?
 
 	// MARK: UIView
 	override convenience init(frame: CGRect) {
-
 		self.init(refreshCompletion: nil)
 	}
 
 	required init?(coder aDecoder: NSCoder) {
-		
-		super.init(coder: aDecoder)
+		fatalError("init(coder:) has not been implemented")
 	}
 
 	init(refreshCompletion: RefreshCompletionCallback?) {
 
 		self.refreshCompletion = refreshCompletion
-		let height: CGFloat = 120.0
 		let refreshViewFrame = CGRect(x: 0,
 		                              y: -height,
 		                              width: UIScreen.main.bounds.width,
@@ -59,44 +61,37 @@ class RefreshView: UIView {
 		super.init(frame: refreshViewFrame)
 		frame = refreshViewFrame
 
-		let ballViewHeight: CGFloat = 56
-		ballView = BallView(
-			frame: CGRect(x: 0, y: 50, width: frame.width, height: ballViewHeight),
-			circleSize: 28,
-			timingFunc: CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut),
-			moveUpDuration: 0.2,
-			moveUpDist: 53,
-			color: UIColor.white)
+		ballView = BallView(frame: CGRect(x: 0,
+		                                  y: 50,
+		                                  width: frame.width,
+		                                  height: ballViewHeight))
 		addSubview(ballView!)
 		ballView?.isHidden = true
 	}
 
 	func addPullWave() {
 
-		backgroundColor = UIColor(red: 0.38,
-		                          green: 0.64,
-		                          blue: 0.95,
-		                          alpha: 1)
+		backgroundColor = viewColor
 		waveLayer = CAShapeLayer(layer: self.layer)
 		waveLayer?.lineWidth = 1
 		waveLayer?.path = wavePath(0.0, amountY: 0.0)
 		waveLayer?.strokeColor = backgroundColor?.cgColor
 		waveLayer?.fillColor = backgroundColor?.cgColor
-		superview?.layer.addSublayer(waveLayer!)
+		layer.addSublayer(waveLayer!)
 	}
 
-	func wavePath(_ amountX:CGFloat, amountY:CGFloat) -> CGPath {
+	func wavePath(_ amountX: CGFloat, amountY: CGFloat) -> CGPath {
 
-		let w = self.frame.width
-		let centerY:CGFloat = 0
+		let width = frame.width
+		let height = frame.height
 
-		let topLeftPoint = CGPoint(x: 0, y: centerY)
-		let topMidPoint = CGPoint(x: w / 2 + amountX, y: centerY + amountY)
-		let topRightPoint = CGPoint(x: w, y: centerY)
+		let leftPoint = CGPoint(x: 0, y: height)
+		let midPoint = CGPoint(x: width / 2 + amountX, y: height + amountY)
+		let rightPoint = CGPoint(x: width, y: height)
 
 		let bezierPath = UIBezierPath()
-		bezierPath.move(to: topLeftPoint)
-		bezierPath.addQuadCurve(to: topRightPoint, controlPoint: topMidPoint)
+		bezierPath.move(to: leftPoint)
+		bezierPath.addQuadCurve(to: rightPoint, controlPoint: midPoint)
 		return bezierPath.cgPath
 	}
 
@@ -140,12 +135,11 @@ class RefreshView: UIView {
 			self.wavePath(0.0, amountY: 0.0)
 		]
 		bounce.values = values
-		bounce.duration = 0.4
+		bounce.duration = 0.5
 		bounce.isRemovedOnCompletion = true
 		bounce.fillMode = kCAFillModeForwards
 		waveLayer?.add(bounce, forKey: "return")
 
-		
 		Timer.scheduledTimer(timeInterval: 0.2, target: self,
 		                     selector: #selector(self.ballAnimation),
 		                     userInfo: nil,

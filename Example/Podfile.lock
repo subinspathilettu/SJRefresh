@@ -1,12 +1,7 @@
 PODS:
-  - Alamofire (4.0.1)
-  - AlamofireImage (3.1.0):
-    - Alamofire (~> 4.0)
   - SJRefresh (1.0.1)
 
 DEPENDENCIES:
-  - Alamofire (= 4.0.1)
-  - AlamofireImage (= 3.1)
   - SJRefresh (from `../`)
 
 EXTERNAL SOURCES:
@@ -14,10 +9,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
-  AlamofireImage: bb8c8351c51cb1633bb6be69b6dbbaff37ce65b7
   SJRefresh: 1989759d140092080022b8a490d10359f121e1a3
 
-PODFILE CHECKSUM: 3d68699d3d44a3ff9713d44f4ea030a821903292
+PODFILE CHECKSUM: 83e87da523d86f2a81d53b09124d42e2b37d9240
 
 COCOAPODS: 1.1.1

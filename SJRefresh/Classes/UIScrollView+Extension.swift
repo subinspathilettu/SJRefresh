@@ -24,56 +24,38 @@
 import Foundation
 import UIKit
 
-struct RefreshConst {
-
-	static let pullTag = 810
-}
-
 /**
-*  Open UIScrollView extension for add/remove/start/stop refresh view.
+* UIScrollView extension
 */
 public extension UIScrollView {
 
-	/**
-	* Method for add refreshview to scrollview.
-	*
-	* - parameter refreshCompletion: Refresh start callback.
-	*/
-	public func addRefreshView(_ refreshCompletion: ((Void) -> Void)?) {
+	public func addRefresh(_ callback: RefreshTriggeredCallback? = nil) {
 
-		let refreshView = RefreshView(refreshCompletion: refreshCompletion)
-		refreshView.tag = RefreshConst.pullTag
-		addSubview(refreshView)
-		refreshView.addPullWave()
+		SJRefresh.sharedInstance.addRefreshViewTo(scrollView: self,
+		                                          callback: callback)
 	}
 
-	/**
-	* Method for removing refresh view from scrollview.
-	*/
-	public func removePullRefresh() {
+	public func addRefresh(theme: UIView, callback: RefreshTriggeredCallback? = nil) {
 
-		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
-		refreshView?.removeFromSuperview()
+		SJRefresh.sharedInstance.addRefreshViewTo(scrollView: self,
+		                                          theme: theme,
+		                                          callback: callback)
 	}
 
-	/**
-	* Method for stop refresh animation.
-	*/
+	public func removeRefresh() {
+
+		SJRefresh.sharedInstance.removeRefresh(scrollView: self)
+	}
+
 	public func stopRefreshAnimation() {
 
-		let refreshView = self.refreshViewWithTag(RefreshConst.pullTag)
-		refreshView?.ballView?.endAnimation() { _ in
-			refreshView?.ballView?.isHidden = true
-			let yPos = -((refreshView?.frame.height)! - (refreshView?.bendDistance)!)
-			self.setContentOffset(CGPoint(x: 0, y: yPos), animated: false)
-			self.setContentOffset(CGPoint.zero, animated: true)
-			self.isScrollEnabled = true
-		}
+		SJRefresh.sharedInstance.stopRefreshAnimation(scrollView: self)
 	}
 
-	fileprivate func refreshViewWithTag(_ tag: Int) -> RefreshView? {
+	func refreshTriggered(_ notification: Notification) {
 
-		let pullToRefreshView = viewWithTag(tag)
-		return pullToRefreshView as? RefreshView
+		if let scrollView = notification.object as? UIScrollView, scrollView == self {
+			SJRefresh.sharedInstance.refreshTriggeredCallback?()
+		}
 	}
 }

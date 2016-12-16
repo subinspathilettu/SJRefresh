@@ -11,6 +11,8 @@
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
+		64C65DEC1E011D860082F526 /* BallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C65DEA1E011D860082F526 /* BallView.swift */; };
+		64C65DED1E011D860082F526 /* RefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C65DEB1E011D860082F526 /* RefreshView.swift */; };
 		64FABFBC1DD4520E00546C3F /* refresh_sample.gif in Resources */ = {isa = PBXBuildFile; fileRef = 64FABFBB1DD4520E00546C3F /* refresh_sample.gif */; };
 		69C6965322AF5D376A8D3B96 /* Pods_SJRefresh_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D44F6BA9F0DEDDCC4610CBC /* Pods_SJRefresh_Example.framework */; };
 /* End PBXBuildFile section */
@@ -27,6 +29,8 @@
 		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		60AF37EB87CACFC77FAB3E1A /* SJRefresh.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SJRefresh.podspec; path = ../SJRefresh.podspec; sourceTree = "<group>"; };
+		64C65DEA1E011D860082F526 /* BallView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BallView.swift; sourceTree = "<group>"; };
+		64C65DEB1E011D860082F526 /* RefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefreshView.swift; sourceTree = "<group>"; };
 		64FABFBB1DD4520E00546C3F /* refresh_sample.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = refresh_sample.gif; sourceTree = "<group>"; };
 		69B8424B40AAD6FDC73FB541 /* Pods-SJRefresh_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SJRefresh_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SJRefresh_Example/Pods-SJRefresh_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		9F10C25372A49F4433C86BCD /* Pods-SJRefresh_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SJRefresh_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-SJRefresh_Example/Pods-SJRefresh_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -68,6 +72,8 @@
 		607FACD21AFB9204008FA782 /* Example for SJRefresh */ = {
 			isa = PBXGroup;
 			children = (
+				64C65DEA1E011D860082F526 /* BallView.swift */,
+				64C65DEB1E011D860082F526 /* RefreshView.swift */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -241,7 +247,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64C65DEC1E011D860082F526 /* BallView.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				64C65DED1E011D860082F526 /* RefreshView.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

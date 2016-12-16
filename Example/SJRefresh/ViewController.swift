@@ -12,16 +12,20 @@ import SJRefresh
 class ViewController: UIViewController {
 
 	@IBOutlet weak var tableView: UITableView!
+	var refreshView: RefreshView?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		tableView.addRefreshView({ (_) in
-			self.perform(#selector(self.stop), with: nil, afterDelay: 5.0)
-		})
+		tableView.addRefresh() { _ in
+			self.perform(#selector(self.stop),
+			             with: nil,
+			             afterDelay: 2.0)
+		}
 	}
 
 	func stop() {
+		
 		tableView.stopRefreshAnimation()
 	}
 }

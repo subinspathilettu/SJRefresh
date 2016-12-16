@@ -24,10 +24,9 @@ import UIKit
 
 let contentOffsetKeyPath = "contentOffset"
 var kvoContext = "PullToRefreshKVOContext"
-
 typealias RefreshCompletionCallback = (Void) -> Void
 
-class RefreshView: UIView {
+public class RefreshView: UIView {
 
 	// MARK: Variables
 	var refreshCompletion: RefreshCompletionCallback?
@@ -46,8 +45,17 @@ class RefreshView: UIView {
 		self.init(refreshCompletion: nil)
 	}
 
-	required init?(coder aDecoder: NSCoder) {
+	required public init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+
+	convenience init(scrollView: UIScrollView, refreshCompletion: RefreshCompletionCallback?) {
+		self.init(refreshCompletion: refreshCompletion)
+
+		scrollView.addObserver(self, forKeyPath: contentOffsetKeyPath,
+		                 options: .initial,
+		                 context: &kvoContext)
+		scrollView.addSubview(self)
 	}
 
 	init(refreshCompletion: RefreshCompletionCallback?) {
@@ -67,6 +75,23 @@ class RefreshView: UIView {
 		                                  height: ballViewHeight))
 		addSubview(ballView!)
 		ballView?.isHidden = true
+		addPullWave()
+
+		NotificationCenter.default.addObserver(self,
+		                                       selector: #selector(self.endAnimation),
+		                                       name: Notification.Name("SJStopRefreshAnimation"),
+		                                       object: nil)
+	}
+
+	deinit {
+		removeObserver(self, forKeyPath: contentOffsetKeyPath, context: &kvoContext)
+	}
+
+	public func addObserver(_ view: UIView) {
+
+		view.addObserver(self, forKeyPath: contentOffsetKeyPath,
+		            options: .initial,
+		            context: &kvoContext)
 	}
 
 	func addPullWave() {
@@ -95,30 +120,6 @@ class RefreshView: UIView {
 		return bezierPath.cgPath
 	}
 
-	override func willMove(toSuperview superView: UIView!) {
-
-		self.removeRegister()
-		guard let scrollView = superView as? UIScrollView else {
-			return
-		}
-		scrollView.addObserver(self,
-		                       forKeyPath: contentOffsetKeyPath,
-		                       options: .initial,
-		                       context: &kvoContext)
-	}
-
-	func removeRegister() {
-
-		if let scrollView = superview as? UIScrollView {
-			scrollView.removeObserver(self, forKeyPath: contentOffsetKeyPath, context: &kvoContext)
-		}
-	}
-
-	deinit {
-
-		self.removeRegister()
-	}
-
 	func boundAnimation(positionX: CGFloat,positionY: CGFloat) {
 
 		waveLayer?.path = wavePath(0, amountY: 0)
@@ -144,7 +145,11 @@ class RefreshView: UIView {
 		                     selector: #selector(self.ballAnimation),
 		                     userInfo: nil,
 		                     repeats: false)
-		refreshCompletion?()
+
+		DispatchQueue.main.async {
+			NotificationCenter.default.post(name: Notification.Name("SJRefreshTriggered"),
+			                                object: self.superview)
+		}
 	}
 
 	func ballAnimation() {
@@ -153,18 +158,24 @@ class RefreshView: UIView {
 		ballView?.startAnimation()
 	}
 
+	public func endAnimation() {
+
+		ballView?.endAnimation() { _ in
+			self.ballView?.isHidden = true
+			let yPos = -((self.frame.height) - (self.bendDistance))
+			let scrollView = self.superview as! UIScrollView
+			scrollView.setContentOffset(CGPoint(x: 0, y: yPos), animated: false)
+			scrollView.setContentOffset(CGPoint.zero, animated: true)
+			scrollView.isScrollEnabled = true
+		}
+	}
+
 	// MARK: KVO
-	override func observeValue(forKeyPath keyPath: String?, of object: Any?,
+	override public func observeValue(forKeyPath keyPath: String?, of object: Any?,
 	                           change: [NSKeyValueChangeKey : Any]?,
 	                           context: UnsafeMutableRawPointer?) {
 
 		guard let scrollView = object as? UIScrollView else {
-			return
-		}
-
-		if !(context == &kvoContext && keyPath == contentOffsetKeyPath) {
-			
-			super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
 			return
 		}
 
